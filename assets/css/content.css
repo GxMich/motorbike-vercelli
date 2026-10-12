@@ -1,0 +1,140 @@
+/* Clear navigation and richer workshop content, alongside the existing motion. */
+@font-face { font-family: "Motorbike Condensed"; src: url("../fonts/BarlowCondensed-ExtraBoldItalic.ttf") format("truetype"); font-weight: 800; font-style: italic; font-display: swap; }
+:root { --actionbar-h: 0px; }
+.header-nav { display: flex; align-items: center; gap: 26px; margin-right: 24px; }
+.header-nav a { padding-block: 10px; border-bottom: 2px solid transparent; text-decoration: none; font-size: 1rem; font-weight: 600; white-space: nowrap; }
+.header-nav a:hover, .header-nav a[aria-current] { border-bottom-color: var(--red); }
+.menu-lines { width: 18px; height: 12px; border-block: 2px solid currentColor; display: inline-block; }
+.menu nav a[aria-current] { color: var(--red); }
+.menu li a { white-space: normal; }
+.mobile-actions { display: none; }
+.hero-bottom { padding-bottom: clamp(36px, 6vh, 64px); }
+.aisle.pinned { padding-bottom: 36px; }
+.helmets-legend { bottom: 32px; }
+.shop-title { bottom: 52px; }
+.workshop-hero-call { margin-top: 6px; }
+.foot { padding-bottom: 48px; }
+
+.store-intro { background: var(--night-2); padding-block: clamp(72px, 9vw, 124px); }
+.store-intro-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(36px, 5vw, 72px); align-items: center; }
+.store-intro-photo { margin: 0; }
+.store-intro-photo img { width: 100%; aspect-ratio: 1.05; object-fit: cover; object-position: 42% 50%; border-radius: 4px; }
+.store-intro-photo figcaption { color: var(--mute); font-size: .88rem; padding-top: 12px; }
+.store-intro h2 { font-size: clamp(2.5rem, 4.8vw, 4.8rem); line-height: .96; --w: 72; margin-bottom: 28px; }
+.store-intro-copy > p { color: var(--mute); }
+.store-intro-copy > .lead { color: var(--white); }
+.content-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin-top: 28px; }
+.content-actions .text-link { margin: 0; }
+.helmets-advice { font-family: var(--body); font-size: 1rem; font-weight: 400; line-height: 1.5; color: var(--mute); max-width: 37ch; margin: 0 0 16px; }
+.steps-txt { min-height: 6.3em; }
+
+.workshop-intro { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(32px, 5vw, 72px); align-items: start; margin-bottom: 54px; }
+.section-label { margin-bottom: 18px; color: var(--mute); font-size: 1.05rem; font-weight: 600; }
+.workshop-heading { font-size: clamp(2.5rem, 5vw, 5rem); font-stretch: 72%; line-height: 1; }
+.workshop-intro-copy > p { color: var(--mute); }
+.workshop-intro-copy > .lead { color: var(--white); }
+.workshop-gallery { display: grid; grid-template-columns: 1.25fr 1fr; gap: 20px; margin-bottom: 64px; }
+.workshot { margin: 0; overflow: hidden; border-radius: 4px; background: var(--night-2); display: flex; flex-direction: column; }
+.workshot-main { grid-row: span 2; }
+.workshot-image { position: relative; flex: 1; overflow: hidden; aspect-ratio: 2.2; }
+.workshot-image img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.workshot-main .workshot-image { aspect-ratio: auto; min-height: 350px; }
+.workshot-main img { object-position: 38% 50%; }
+.workshot-entry img { object-position: 50% 37%; }
+.workshot-detail img { object-position: 88% 65%; transform: scale(1.75); transform-origin: 85% 65%; }
+.workshot figcaption { padding: 16px 20px; display: grid; gap: 5px; }
+.workshot figcaption b { font-weight: 600; font-size: 1.02rem; }
+.workshot figcaption span { color: var(--mute); font-size: .88rem; line-height: 1.4; }
+.booking-phone { display: inline-block; margin-top: 12px; color: var(--white); font-size: .95rem; text-underline-offset: 4px; }
+.workshop-faq { display: grid; grid-template-columns: .9fr 1.1fr; gap: 48px; margin-top: 64px; }
+.workshop-faq h3 { font-size: clamp(1.7rem, 3vw, 2.6rem); line-height: 1.1; }
+.faq-items details { padding-block: 20px; border-top: 1px solid var(--line); }
+.faq-items details:last-child { border-bottom: 1px solid var(--line); }
+.faq-items summary { list-style: none; cursor: pointer; font-weight: 600; display: flex; gap: 24px; justify-content: space-between; }
+.faq-items summary::-webkit-details-marker { display: none; }
+.faq-items summary::after { content: "+"; font-size: 1.4rem; color: var(--red); line-height: 1.1; }
+.faq-items details[open] summary::after { content: "−"; }
+.faq-items p { color: var(--mute); margin: 16px 0 0; font-size: 1rem; }
+.workshop-next-step { display: flex; justify-content: space-between; align-items: center; gap: 32px; margin-top: 56px; padding: 32px 0 0; border-top: 3px solid var(--red); }
+.workshop-next-step h3 { font-size: clamp(1.7rem, 3vw, 2.5rem); }
+.workshop-next-step p { color: var(--mute); margin: 12px 0 0; }
+.workshop-next-step .btn { flex: none; }
+
+/* A centered, solid wordmark and useful links to finish the visit. */
+.foot { border-top: 1px solid var(--line); padding-top: clamp(36px, 5vw, 64px); background: #12171b; }
+.foot-invite { display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+.foot-invite p { margin: 0; color: var(--mute); font-size: 1.05rem; }
+.foot-invite strong { color: var(--white); font-weight: 600; }
+.foot-invite .text-link { margin: 0; }
+.foot-brand { display: grid; justify-items: center; margin: clamp(36px, 5vw, 64px) 0; text-align: center; text-decoration: none; }
+.foot-word { margin: 0; padding-inline: .08em .13em; color: var(--white); -webkit-text-stroke: 0; font-family: "Motorbike Condensed", "Arial Narrow", sans-serif; font-weight: 800; font-style: italic; font-size: clamp(4.5rem, 15.5vw, 14rem); line-height: .85; text-transform: uppercase; white-space: nowrap; }
+.foot-city { margin-top: 16px; font-size: clamp(.95rem, 1.5vw, 1.25rem); font-weight: 700; text-transform: uppercase; color: var(--red); }
+.foot-grid { display: grid; grid-template-columns: 1fr 1.05fr 1.25fr 1fr; gap: 24px 36px; padding-block: 36px; border-block: 1px solid var(--line); }
+.foot-column { min-width: 0; }
+.foot-column h2 { margin: 0 0 16px; font-family: var(--body); font-size: 1rem; font-weight: 700; line-height: 1.4; }
+.foot-column ul { list-style: none; padding: 0; margin: 0; }
+.foot-column a { display: inline-block; padding-block: 6px; color: var(--mute); text-decoration: none; font-size: .95rem; line-height: 1.5; overflow-wrap: anywhere; }
+.foot-column a:hover { color: var(--white); text-decoration: underline; text-underline-offset: 4px; }
+.foot-column address { margin-bottom: 10px; color: var(--mute); font-style: normal; font-size: .95rem; }
+.foot-legal { align-items: center; margin-top: 24px; font-size: .8rem; gap: 20px 32px; }
+.foot-back { padding-block: 10px; font-size: .9rem; color: var(--white); }
+.foot-back span { padding-left: 10px; color: var(--red); }
+
+@media (max-width: 1100px) { .foot-grid { grid-template-columns: 1fr 1fr; gap: 32px 48px; } }
+@media (max-width: 540px) {
+  .foot-invite { align-items: flex-start; flex-direction: column; gap: 16px; }
+  .foot-brand { margin-block: 40px; }
+  .foot-word { font-size: 17vw; }
+  .foot-city { margin-top: 12px; }
+  .foot-grid { gap: 28px 20px; padding-block: 28px; }
+  .foot-column h2 { font-size: .95rem; margin-bottom: 10px; }
+  .foot-column a { font-size: .88rem; padding-block: 10px; }
+  .foot-column address { font-size: .88rem; }
+  .foot-legal { align-items: flex-start; flex-direction: column; gap: 16px; }
+}
+
+@media (max-width: 1100px) { .header-nav { display: none; } }
+@media (max-width: 900px) {
+  .store-intro-grid, .workshop-intro, .workshop-faq { grid-template-columns: 1fr; }
+  .store-intro-photo img { aspect-ratio: 1.55; object-position: 50% 50%; }
+  .workshop-intro { gap: 28px; }
+  .workshop-heading br { display: none; }
+  .workshop-gallery { grid-template-columns: 1fr 1fr; }
+  .workshot-main { grid-column: span 2; grid-row: auto; }
+  .workshot-main .workshot-image { aspect-ratio: 1.75; min-height: 0; }
+  .workshop-faq { gap: 28px; }
+}
+@media (max-width: 760px) {
+  :root { --actionbar-h: 50px; }
+  .hero-bottom { padding-bottom: 36px; }
+  .mobile-actions { position: fixed; z-index: 70; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: 1fr 1fr; background: var(--night); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom); transform: translateY(102%); visibility: hidden; transition: transform .22s ease, visibility .22s; }
+  .has-mobile-actions .mobile-actions { transform: none; visibility: visible; }
+  .menu-open .mobile-actions { visibility: hidden; }
+  .mobile-actions a { min-height: 50px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: .95rem; font-weight: 600; text-decoration: none; }
+  .mobile-actions a + a { border-left: 1px solid var(--line); }
+  .mobile-actions svg { width: 17px; height: 17px; }
+  .mobile-actions .mobile-directions { background: var(--red); color: #fff; }
+  .store-intro-grid { gap: 32px; }
+  .store-intro h2 { font-size: clamp(2.3rem, 8.5vw, 3.5rem); margin-bottom: 22px; }
+  .content-actions .btn { width: 100%; justify-content: center; }
+  .content-actions { gap: 18px; }
+  .helmets-advice { font-size: .92rem; max-width: 36ch; margin-top: 6px; }
+  .steps-txt { min-height: 3.5em; }
+  .helmets-copy { bottom: calc(var(--actionbar-h) + 24px); }
+  .shop-title { bottom: calc(var(--actionbar-h) + 28px); }
+  .shop-title .lead { font-size: 1.04rem; line-height: 1.5; }
+  .workshop-hero-call { font-size: .95rem; margin-top: 2px; }
+  .workshop-heading { font-size: 2.8rem; }
+  .workshop-gallery { grid-template-columns: 1fr; gap: 18px; margin-bottom: 42px; }
+  .workshot-main { grid-column: auto; }
+  .workshot-main .workshot-image { aspect-ratio: 1.28; }
+  .workshot-image { aspect-ratio: 1.65; }
+  .workshot figcaption { padding: 16px; }
+  .workshop-faq { margin-top: 48px; }
+  .workshop-next-step { flex-direction: column; align-items: stretch; gap: 22px; margin-top: 40px; }
+  .workshop-next-step .btn { justify-content: center; }
+  .foot { padding-bottom: calc(40px + var(--actionbar-h) + env(safe-area-inset-bottom)); }
+}
+.no-js .mobile-actions { transform: none; visibility: visible; }
+.no-js .hero-bottom { padding-bottom: calc(36px + var(--actionbar-h)); }
+@media (prefers-reduced-motion: reduce) { .mobile-actions { transition: none; } }

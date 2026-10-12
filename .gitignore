@@ -1,0 +1,17 @@
+# Local working material and archived designs
+.claude/
+.design/
+_v1/
+PITCH.md
+proposta.html
+PROJECT-MOTION-BRIEF.md
+
+# Local dependencies, credentials and machine files
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+__pycache__/
+Thumbs.db
+.DS_Store
