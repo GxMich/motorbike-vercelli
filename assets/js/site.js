@@ -157,7 +157,7 @@
     gsap.timeline()
       .fromTo(chars, { yPercent: 105, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 1, ease: "expo.out", stagger: 0.035 }, 0)
       .fromTo(line1, { "--w": 50 }, { "--w": WM_W, duration: 1.6, ease: "expo.out" }, 0.1)
-      .fromTo(".hero-tag, .hero-bottom", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: .9, ease: "power3.out", stagger: .08 }, .45)
+      .fromTo(".hero-tag", { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: .6, ease: "power3.out" }, .2)
       ;
   }
 
@@ -174,16 +174,16 @@
   if (reduced || seen || !ign) {
     if (ign) ign.remove();
     $(".wm-1", h1).style.setProperty("--w", WM_W);
-    if (!reduced) { gsap.set(".wm-1 .ch, .wm-2 .ch, .hero-tag, .hero-bottom", { opacity: 0 }); requestAnimationFrame(heroIn); }
+    if (!reduced) { gsap.set(".wm-1 .ch, .wm-2 .ch, .hero-tag", { opacity: 0 }); requestAnimationFrame(heroIn); }
   } else {
     if (lenis) lenis.stop();
-    gsap.set(".wm-1 .ch, .wm-2 .ch, .hero-tag, .hero-bottom", { opacity: 0 });
+    gsap.set(".wm-1 .ch, .wm-2 .ch, .hero-tag", { opacity: 0 });
     var needleV = { v: 0 };
     var intro = gsap.timeline({ delay: .12 })
-      .to(needleV, { v: 13, duration: .6, ease: "power2.in", onUpdate: function () { drawNeedle(needleV.v); } })
-      .fromTo("#ignition-brand", { "--w": 50, opacity: .2 }, { "--w": 125, opacity: 1, duration: .85, ease: "expo.out" }, 0)
-      .to(needleV, { v: 0, duration: .65, ease: "power3.out", onUpdate: function () { drawNeedle(needleV.v); } }, ">")
-      .to(ign, { clipPath: "inset(0 0 100% 0)", duration: .7, ease: "expo.inOut", onComplete: endIntro }, "-=.15");
+      .to(needleV, { v: 13, duration: .4, ease: "power2.in", onUpdate: function () { drawNeedle(needleV.v); } })
+      .fromTo("#ignition-brand", { "--w": 50, opacity: .2 }, { "--w": 125, opacity: 1, duration: .5, ease: "expo.out" }, 0)
+      .to(needleV, { v: 0, duration: .4, ease: "power3.out", onUpdate: function () { drawNeedle(needleV.v); } }, ">")
+      .to(ign, { clipPath: "inset(0 0 100% 0)", duration: .45, ease: "expo.inOut", onComplete: endIntro }, "-=.1");
     $("#ignition-skip").addEventListener("click", function () { intro.progress(1); });
   }
 
@@ -215,7 +215,7 @@
 
   // Navigation tracks section positions, including the original pinned scenes.
   var sections = $$("main > section[id]");
-  var sectionLinks = $$(".header-nav a, #menu nav a");
+  var sectionLinks = $$('.header-nav a[href^="#"], #menu nav a[href^="#"]');
   var current = -1;
   function setCurrentSection(i) {
     if (i === current) return;
@@ -364,7 +364,7 @@
 
     if (!reduced) {
       ScrollTrigger.create({
-        trigger: stage, start: "top top", end: "+=170%", pin: true, anticipatePin: 1,
+        trigger: stage, start: "top top", end: "+=120%", pin: true, anticipatePin: 1,
         onUpdate: function (s) { target = s.progress; setStep(s.progress < .3 ? 0 : s.progress < .7 ? 1 : 2); }
       });
       ScrollTrigger.create({ trigger: "#caschi", start: "top bottom", end: "bottom top", onToggle: function (s) { visible = s.isActive; } });
@@ -436,7 +436,7 @@
      4 — La serranda dell'officina si alza
      --------------------------------------------------------- */
   if (!reduced) {
-    gsap.timeline({ scrollTrigger: { trigger: "#shop-stage", start: "top top", end: "+=120%", pin: true, scrub: .6, anticipatePin: 1 } })
+    gsap.timeline({ scrollTrigger: { trigger: "#shop-stage", start: "top top", end: "+=85%", pin: true, scrub: .6, anticipatePin: 1 } })
       .to("#shutter", { yPercent: -102, ease: "power2.in", duration: 1 }, .05)
       .fromTo(".shop-photo img", { scale: 1.2, filter: "brightness(.4)" }, { scale: 1, filter: "brightness(1)", ease: "none", duration: 1.2 }, 0)
       .fromTo("#officina-title", { "--w": 45, yPercent: 30, opacity: 0 }, { "--w": 70, yPercent: 0, opacity: 1, ease: "power3.out", duration: .5 }, .65)
@@ -465,7 +465,8 @@
      --------------------------------------------------------- */
   var bq = $("#big-quote");
   if (bq && !reduced) {
-    var txt = bq.textContent; bq.setAttribute("aria-label", txt); bq.textContent = "";
+    var txt = bq.textContent; bq.textContent = "";
+    var readable = document.createElement("span"); readable.className = "sr"; readable.textContent = txt; bq.appendChild(readable);
     txt.split(" ").forEach(function (w, i) {
       var s = document.createElement("span"); s.className = "w"; s.setAttribute("aria-hidden", "true"); s.textContent = w;
       bq.appendChild(s); if (i < txt.split(" ").length - 1) bq.appendChild(document.createTextNode(" "));
@@ -487,10 +488,10 @@
   function initMenu(lenisRef) {
     var menu = $("#menu"), openB = $("#menu-open"), closeB = $("#menu-close");
     if (!menu) return function () {};
-    function open() { menu.classList.add("open"); document.body.classList.add("menu-open"); openB.setAttribute("aria-expanded", "true"); if (lenisRef) lenisRef.stop(); setTimeout(function () { closeB.focus(); }, 50); }
+    function open() { menu.inert = false; menu.classList.add("open"); document.body.classList.add("menu-open"); $("#main").inert = true; $(".foot").inert = true; openB.setAttribute("aria-expanded", "true"); if (lenisRef) lenisRef.stop(); setTimeout(function () { closeB.focus(); }, 50); }
     function close() {
       if (!menu.classList.contains("open")) return;
-      menu.classList.remove("open"); document.body.classList.remove("menu-open"); openB.setAttribute("aria-expanded", "false"); if (lenisRef) lenisRef.start(); openB.focus({ preventScroll: true });
+      menu.inert = true; menu.classList.remove("open"); document.body.classList.remove("menu-open"); $("#main").inert = false; $(".foot").inert = false; openB.setAttribute("aria-expanded", "false"); if (lenisRef) lenisRef.start(); openB.focus({ preventScroll: true });
     }
     openB.addEventListener("click", open); closeB.addEventListener("click", close);
     menu.addEventListener("click", function (e) { if (e.target.closest("a")) close(); });
@@ -528,9 +529,8 @@
       e.preventDefault();
       if (!valid(i)) return;
       var el = form.elements, giorno = el.data.value ? new Date(el.data.value + "T12:00").toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" }) : "giorno da concordare";
-      msg.innerHTML = "<strong>Richiesta pronta, " + escapeHtml(el.nome.value.trim().split(" ")[0]) + "</strong>" +
-        escapeHtml(el.tipo.value) + " per " + escapeHtml(el.moto.value) + ", " + escapeHtml(giorno) +
-        ". Nel sito definitivo arriva subito in negozio e ti richiamiamo al " + escapeHtml(el.tel.value) + ".<br><small class=\"mute\">Demo: nessun dato è stato inviato.</small>";
+      var body = "Richiesta officina: " + el.tipo.value + "\nMoto: " + el.moto.value + "\nGiorno preferito (da concordare): " + giorno + "\nNome: " + el.nome.value + "\nTelefono: " + el.tel.value + "\nNote: " + el.note.value;
+      msg.innerHTML = "<strong>Bozza pronta, " + escapeHtml(el.nome.value.trim().split(" ")[0]) + "</strong><p>Apri il tuo programma di posta e invia la richiesta. L’appuntamento si concorda con l’officina.</p><a class=\"btn btn-red\" href=\"mailto:motorbikevercelli@gmail.com?subject=" + encodeURIComponent("Richiesta officina — " + el.tipo.value) + "&amp;body=" + encodeURIComponent(body) + "\">Apri la bozza email</a><br><small class=\"mute\">Nessun dato è stato inviato dal sito.</small>";
       msg.hidden = false;
       form.reset(); show(0); msg.focus();
     });
