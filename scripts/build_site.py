@@ -137,6 +137,7 @@ def write(slug, title, desc, content, parent=None):
     html = f'''<!doctype html><html lang="it" class="no-js"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>{escape(title)} | Motorbike Vercelli</title><meta name="description" content="{escape(desc)}"><meta name="robots" content="noindex, nofollow"><meta name="theme-color" content="#171c21"><meta property="og:title" content="{escape(title)} | Motorbike Vercelli"><meta property="og:description" content="{escape(desc)}"><meta property="og:image" content="assets/img/og-image.jpg"><meta property="og:type" content="website"><link rel="icon" href="assets/img/favicon.png"><link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,400..900&amp;family=Barlow:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><script>document.documentElement.classList.replace('no-js','js');if(matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('reduced');</script><link rel="stylesheet" href="assets/css/style.css"><link rel="stylesheet" href="assets/css/bike.css"><link rel="stylesheet" href="assets/css/content.css"><link rel="stylesheet" href="assets/css/pages.css"><script type="application/ld+json">{json.dumps(schema,ensure_ascii=False)}</script><script src="assets/js/pages.js" defer></script></head><body class="bike-edition inner-page"><a class="skip" href="#main">Vai al contenuto</a>{header(parent or slug)}<main id="main">{content}</main>{footer()}</body></html>'''
     html = html.replace('class="bike-edition inner-page"',f'class="bike-edition inner-page page-{parent or slug}"')
     html = html.replace('<script src="assets/js/pages.js"','<script src="assets/js/site-config.js" defer></script><script src="assets/js/pages.js"')
+    html = html.replace('assets/css/pages.css"','assets/css/pages.css?v=20261013-conversion"').replace('assets/js/pages.js"','assets/js/pages.js?v=20261013-conversion"')
     html = '\n'.join(line.rstrip() for line in html.split('\n'))
     (ROOT / f'{slug}.html').write_text(html,encoding='utf-8')
 
@@ -210,6 +211,9 @@ def build():
 
     # Update only shared chrome and destination links in the existing animated home.
     home = (ROOT/'index.html').read_text(encoding='utf-8')
+    home = re.sub(r'assets/js/site\.js(?:\?[^"\s]*)?', 'assets/js/site.js?v=20261013-conversion', home)
+    home = re.sub(r'assets/js/pages\.js(?:\?[^"\s]*)?', 'assets/js/pages.js?v=20261013-conversion', home)
+    home = re.sub(r'assets/css/pages\.css(?:\?[^"\s]*)?', 'assets/css/pages.css?v=20261013-conversion', home)
     if 'intent-section' not in home: home = home.replace('    <section class="store-intro"',home_paths()+'\n    <section class="store-intro"',1)
     else: home = re.sub(r'<section class="intent-section".*?</section>',home_paths(),home,flags=re.S)
     home = re.sub(r'<form class="booking" id="booking".*?</form>','<div id="home-request">'+form(True)+'</div>',home,flags=re.S)
