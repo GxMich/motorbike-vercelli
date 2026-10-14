@@ -1,0 +1,22 @@
+[
+  {
+    "file": "Barlow-Regular.woff2",
+    "source": "https://fonts.gstatic.com/s/barlow/v13/7cHpv4kjgoGqM7E_DMs5.woff2",
+    "license": "OFL-BarlowCondensed.txt"
+  },
+  {
+    "file": "Barlow-SemiBold.woff2",
+    "source": "https://fonts.gstatic.com/s/barlow/v13/7cHqv4kjgoGqM7E30-8s51os.woff2",
+    "license": "OFL-BarlowCondensed.txt"
+  },
+  {
+    "file": "BarlowCondensed-ExtraBoldItalic.woff2",
+    "source": "https://fonts.gstatic.com/s/barlowcondensed/v13/HTxyL3I-JCGChYJ8VI-L6OO_au7B6xTrf3fmu4kG.woff2",
+    "license": "OFL-BarlowCondensed.txt"
+  },
+  {
+    "file": "BarlowCondensed-Bold.woff2",
+    "source": "https://fonts.gstatic.com/s/barlowcondensed/v13/HTxwL3I-JCGChYJ8VI-L6OO_au7B46r2z3bWuQ.woff2",
+    "license": "OFL-BarlowCondensed.txt"
+  }
+]

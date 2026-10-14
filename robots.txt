@@ -1,2 +1,6 @@
 User-agent: *
-Disallow: /
+Allow: /
+
+# Demo: every HTML page carries noindex, nofollow. Crawling is allowed
+# so crawlers can read that directive. Do not submit this sitemap for indexing.
+Sitemap: https://gxmich.github.io/motorbike-vercelli/sitemap.xml

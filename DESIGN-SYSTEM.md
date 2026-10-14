@@ -1,33 +1,32 @@
-# Motorbike Vercelli: sito multipagina
+# Motorbike Vercelli — sistema grafico premium
 
-## Direzione
+Grafite #17191b, antracite #222528, bianco caldo #f5f3ee, grigio testo #bdc1c4,
+rosso racing #c9232b. Barlow Condensed Bold per titoli, Barlow per testi e azioni,
+Barlow Condensed ExtraBold Italic per il marchio. Tutti i caratteri sono locali.
 
-Revisione conversione: percorsi casco/moto/officina prima delle scene lunghe; moduli con un recapito unico; fiducia a portata di clic. Guide di scelta per il reparto caschi, richieste nuovo/usato per moto, servizi navigabili per officina. Titoli interni più aperti, fotografie reali con cornici ridotte. Invio diretto configurabile senza backend obbligatorio per la demo statica; nessuna conferma fittizia.
+La fotografia del negozio apre la homepage; i tre percorsi rispondono a esigenze
+reali. I reparti hanno due immagini principali e quattro accessi compatti. Officina
+e prova in negozio sono due composizioni editoriali alternate. Community breve,
+contatti conclusivi e footer operativo completano la pagina.
 
-La home conserva l'esperienza Cruscotto: faro, contagiri, caschi, corsie e serranda. Le pagine interne funzionano come reparti del negozio: fotografie grandi, titoli compatti e informazioni subito raggiungibili. Il sito invita alla visita e al contatto, senza simulare un magazzino o una vendita online.
+Spaziature basate su 8 px, contenitore massimo 1600 px, margini adattivi 20–88 px.
+Raggio 2 px solo sui controlli. Nessuna texture, glow o pannello in vetro. Contrasti
+uniformi e testi di lettura con lunghezza controllata. Foto dei prodotti presentano
+le categorie, senza prezzi, disponibilità o schede commerciali simulate.
 
-## Token
+Il mobile riduce i quattro reparti secondari a righe fotografiche, usa menu a due
+colonne e moduli a colonna singola. I contatti fissi riservano spazio a fondo pagina.
+Titoli e immagini hanno misure stabili. Focus visibile, HTML semantico, menu inert e
+riduzione del movimento fanno parte dei componenti condivisi.
 
-Asfalto `#171c21`, blu insegna `#17232f`, cemento `#dedfd8`, rosso ali `#d9282e`, alluminio `#b0b8b8`, ambra strumenti `#d39b4c`. Anybody per i titoli, Barlow per la lettura, Barlow Condensed ExtraBold Italic locale per il marchio. Griglia massima 1320 px, spazi fluidi, bordi 4 px. Titoli e testi prevalentemente allineati a sinistra.
+Il CSS attivo è assets/css/premium.css. Il linguaggio motion corrente è descritto
+in PROJECT-MOTION-BRIEF.md; lo storico è conservato nella cartella locale .design/archive/.
 
-## Composizione
-
-Pagina reparto: navigazione → breadcrumb → hero divisa tra titolo e foto → navigazione alle categorie → contenuti/consigli → FAQ → invito al contatto → footer.
-
-Pagina dettaglio: breadcrumb completo → oggetto o reparto → informazioni per la scelta → richiesta precompilata → categorie correlate.
-
-Officina: foto vera → servizi verificati → richiesta guidata con riepilogo e bozza email → FAQ.
-
-Contatti: contatti immediati → orari Europe/Rome → foto ingresso e mappa attivabile → messaggio con bozza email.
-
-## Revisione del piano
-
-Evitare un catalogo con prezzi inventati o immagini di moto presentate come disponibili. Ogni reparto ha contenuti propri; le schede hanno la cornice solo dove serve alla scansione. Le immagini reali del negozio restano il centro dell'identità. La home mantiene le animazioni esplicitamente approvate.
-
-## Movimento
-
-Una sola entrata coordinata per la hero interna; selezioni e pannelli 180–240 ms. Niente pin nelle pagine informative. Preferenze reduced-motion rispettate; contenuti disponibili senza JS. Menu con focus, Escape e ritorno al pulsante. Pulsanti con larghezza stabile sulle pagine interne.
-
-## Funzioni
-
-Navigazione multipagina e breadcrumb, ricerca locale dei reparti, filtri categorie con URL condivisibile, pagine dettaglio, modulo officina e contatti che preparano una bozza email da inviare nel proprio client. Nessun invio automatico e nessun dato salvato nei browser. Mappa caricata solo su richiesta.
+Correzione card e motion: le category-card hanno fotografia a piena cornice,
+testo su antracite e azioni allineate. I loghi degli interfoni e il pantalone su
+fondo neutro mantengono una cornice adatta alla loro forma; nessuna deformazione.
+GSAP e ScrollTrigger animano hero e card su tutte le pagine, il ventaglio di
+caschi e la serranda dell’officina, senza introduzione obbligatoria. Su richiesta
+dell’utente, testo e fotografia della scena officina restano fissati insieme
+a ogni larghezza mentre lo scroll alza la serranda;
+la pagina riprende a scorrere a completa apertura. Nessun altro elemento è fissato.

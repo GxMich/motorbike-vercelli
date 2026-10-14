@@ -3,10 +3,9 @@
   'use strict';
   const $ = (s, c = document) => c.querySelector(s);
   const $$ = (s, c = document) => [...c.querySelectorAll(s)];
-  const inner = document.body.classList.contains('inner-page');
   const menu = $('#menu'), open = $('#menu-open'), close = $('#menu-close');
-  // Home delegates its existing menu to site.js; inner pages use the same contract.
-  if (inner && menu && open && close) {
+  // One shared navigation controller, including the homepage.
+  if (menu && open && close) {
     const setMenu = (active) => {
       menu.inert = !active;
       menu.classList.toggle('open', active);
@@ -14,6 +13,7 @@
       open.setAttribute('aria-expanded', String(active));
       $('#main').inert = active;
       $('.foot').inert = active;
+      $('#top').inert = active;
       if (active) requestAnimationFrame(() => { if (menu.classList.contains('open')) close.focus({ preventScroll: true }); });
       else open.focus({ preventScroll: true });
     };
@@ -39,21 +39,9 @@
     function paintHours() {
       const parts = {};
       new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Rome',weekday:'short',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date()).forEach(p => {parts[p.type]=p.value;});
-      const day=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(parts.weekday), minute=+parts.hour*60 + +parts.minute;
-      const hours=[[],[[930,1170]],[[540,720],[930,1170]],[[540,720],[930,1170]],[[540,720],[930,1170]],[[540,720],[930,1170]],[[540,720],[930,1170]]];
-      const fmt = n => `${Math.floor(n/60)}:${String(n%60).padStart(2,'0')}`;
-      const current=hours[day].find(([a,b])=>minute>=a&&minute<b);
-      let text, isOpen=Boolean(current);
-      if (current) text=`Aperto ora, fino alle ${fmt(current[1])}`;
-      else {
-        const next=hours[day].find(([a])=>a>minute);
-        if (next) text=`Chiuso, riapre alle ${fmt(next[0])}`;
-        else for(let step=1;step<=7;step++) {
-          const nextDay=(day+step)%7;
-          if(hours[nextDay].length) {text=`Chiuso, riapre ${step===1?'domani':['domenica','lunedì','martedì','mercoledì','giovedì','venerdì','sabato'][nextDay]} alle ${fmt(hours[nextDay][0][0])}`;break;}
-        }
-      }
-      $$('[data-status]').forEach(el=>{el.textContent=text;el.dataset.open=String(isOpen);});
+      const day=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(parts.weekday);
+      // Published hours cannot establish live opening, holidays or special closures.
+      $$('[data-status]').forEach(el=>{el.textContent='Orari dal sito ufficiale: verifica eventuali variazioni.';});
       $$('.hours-row').forEach(el=>el.classList.toggle('today',+el.dataset.day===day));
     }
     paintHours(); setInterval(paintHours,60000);
@@ -69,6 +57,7 @@
       let count=0;
       cards.forEach(c=>{c.hidden=key!=='all'&&c.dataset.category!==key;if(!c.hidden)count++;});
       $('[data-filter-status]').textContent=`${count} categorie visualizzate`;
+      document.dispatchEvent(new CustomEvent('motorbike:categories-changed',{detail:{grid:cards[0]?.closest('.category-grid')}}));
       if(changeUrl) {const url=new URL(location.href);if(key==='all')url.searchParams.delete('categoria');else url.searchParams.set('categoria',key);history.pushState(null,'',url);}
     };
     filters.addEventListener('click',e=>{const b=e.target.closest('[data-filter]');if(b) select(b.dataset.filter,true);});
@@ -97,6 +86,19 @@
     if(brand||department.includes('-')) form.elements.messaggio.value=`Vorrei informazioni su ${brand||department.replace(/-/g,' ')}. `;
     const need=params.get('esigenza');
     if (need) form.elements.messaggio.value=`Cerco una ${need.toLocaleLowerCase('it')}. La userò per… `;
+    const bikeFields = $('[data-bike-fields]', form);
+    const updateBikeFields = () => {
+      if (!bikeFields) return;
+      bikeFields.hidden = form.elements.argomento.value !== 'Moto';
+      $$('input,select',bikeFields).forEach(field => {field.disabled = bikeFields.hidden;});
+    };
+    if (bikeFields) {
+      if (brand) form.elements.marcaModello.value = brand;
+      if (need?.toLocaleLowerCase('it').includes('usata')) form.elements.acquisto.value = 'Usata';
+      else if (need?.toLocaleLowerCase('it').includes('nuova')) form.elements.acquisto.value = 'Nuova';
+      form.elements.argomento.addEventListener('change', updateBikeFields);
+      updateBikeFields();
+    }
     const date=form.elements.giorno;
     if(date) {const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Rome',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());const find=t=>parts.find(p=>p.type===t).value;date.min=`${find('year')}-${find('month')}-${find('day')}`;}
     const showStatus = (text, kind) => {
@@ -114,7 +116,8 @@
     form.addEventListener('submit',async e=>{
       e.preventDefault();
       if (busy) return;
-      ['nome','messaggio','recapito'].forEach(name=>{form.elements[name].value=form.elements[name].value.trim();});
+      ['nome','messaggio','recapito', ...(workshop ? ['moto'] : [])].forEach(name=>{form.elements[name].value=form.elements[name].value.trim();});
+      form.elements.messaggio.setCustomValidity(form.elements.messaggio.value.length < 10 ? 'Descrivi la richiesta con almeno 10 caratteri.' : '');
       const contact=form.elements.recapito.value;
       const email=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
       const phone=/^\+?[\d\s().-]+$/.test(contact) && contact.replace(/\D/g,'').length>=7 && contact.replace(/\D/g,'').length<=15;
@@ -123,6 +126,12 @@
       const data=new FormData(form);
       const lines=[`Richiesta: ${data.get('argomento')}`,`Nome: ${String(data.get('nome')).trim()}`,`${email?'Email':'Telefono'}: ${contact}`];
       if(workshop) {lines.push(`Moto: ${data.get('moto')}`);if(data.get('giorno'))lines.push(`Giorno preferito (da concordare): ${data.get('giorno')}`);}
+      if (data.get('argomento') === 'Moto') {
+        lines.push(`Nuovo o usato: ${data.get('acquisto')}`);
+        if(data.get('marcaModello')) lines.push(`Marca/modello: ${String(data.get('marcaModello')).trim()}`);
+        if(data.get('budget')) lines.push(`Budget indicativo: ${String(data.get('budget')).trim()}`);
+        lines.push('Disponibilità da confermare con il negozio.');
+      }
       lines.push('',String(data.get('messaggio')).trim());
       const body=lines.join('\n'), subject=`${workshop?'Officina':'Informazioni'} Motorbike — ${data.get('argomento')}`;
       status.hidden = true;
@@ -135,16 +144,17 @@
         const response=await fetch(endpoint,{method:'POST',headers:{'Accept':'application/json','Content-Type':'application/json'},body:JSON.stringify({name:data.get('nome'),email:email?contact:undefined,phone:phone?contact:undefined,message:body,_subject:subject,_gotcha:data.get('_gotcha')||''}),signal:controller.signal});
         const result=await response.json();
         if(!response.ok || result.ok!==true) throw new Error('Request not accepted');
-        form.reset();$('[data-preview]',form).hidden=true;
+        form.reset();updateBikeFields();$('[data-preview]',form).hidden=true;
         showStatus(workshop?'Richiesta inviata. L’officina ti contatterà al recapito indicato per concordare l’intervento.':'Richiesta inviata. Il negozio ti contatterà al recapito indicato.','success');
         record('request_submitted');
       } catch {
         draft(body,subject);
         showStatus('Non abbiamo ricevuto la conferma di invio. Prima di riprovare, puoi chiamare il negozio o inviare la bozza qui sotto.','error');
-      } finally {clearTimeout(timeout);busy=false;send.disabled=false;send.textContent='Invia la richiesta';$$('input,select,textarea',form).forEach(field=>{field.disabled=false;});form.removeAttribute('aria-busy');}
+      } finally {clearTimeout(timeout);busy=false;send.disabled=false;send.textContent='Invia la richiesta';$$('input,select,textarea',form).forEach(field=>{field.disabled=false;});updateBikeFields();form.removeAttribute('aria-busy');}
     });
     // Any edit invalidates the previous draft, avoiding stale contact details.
-    form.addEventListener('input',()=>{$('[data-preview]',form).hidden=true;if(!busy)status.hidden=true;});
+    form.addEventListener('input',e=>{if(e.target.name==='messaggio')e.target.setCustomValidity('');$('[data-preview]',form).hidden=true;if(!busy)status.hidden=true;});
+    form.addEventListener('change',()=>{$('[data-preview]',form).hidden=true;if(!busy)status.hidden=true;});
     $('[data-copy]',form).addEventListener('click',async()=>{
       const status=$('[data-copy-status]',form), body=$('[data-email-preview]',form).textContent;
       try {await navigator.clipboard.writeText(body);status.textContent='Messaggio copiato. Puoi incollarlo nella tua email.';}

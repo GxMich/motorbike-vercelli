@@ -1,72 +1,99 @@
-# Motorbike Vercelli
+# Motorbike Vercelli — redesign premium
 
-Proposta completa di sito statico multipagina per Motorbike Vercelli. **35 pagine**, 22 nuove immagini del sito originale ottimizzate in WebP, home cinematografica e navigazione dedicata ai reparti.
+Sito statico multipagina: 35 pagine HTML, fotografia autentica, navigazione e
+componenti condivisi. Compatibile con GitHub Pages sotto `/motorbike-vercelli/`.
+Questa è una **proposta dimostrativa non ufficiale**, protetta da `noindex, nofollow`.
+Repository della demo: https://github.com/GxMich/motorbike-vercelli.
+Il sito ufficiale di Motorbike non viene modificato.
 
-La demo aggiornata è pubblicata su https://gxmich.github.io/motorbike-vercelli/. Il progetto mantiene `noindex, nofollow` e non è il sito ufficiale dell’attività.
-
-## Avvio
+## Anteprima
 
 ```sh
-python -m http.server 4175 --bind 127.0.0.1
+python scripts/serve.py --port 4175
 ```
 
-Aprire http://127.0.0.1:4175/. Nessuna build o dipendenza è necessaria per servire il sito.
+Aprire http://127.0.0.1:4175/. Per riprodurre la sottocartella GitHub Pages:
 
-## Pagine e funzioni
+```sh
+python scripts/serve.py --port 4176 --base /motorbike-vercelli/
+```
 
-- Home con avviamento, faro, composizione dei caschi, corsie orizzontali, marchi e serranda dell’officina.
-- Negozio, moto, caschi, abbigliamento, interfoni, cross, accessori, officina, club e contatti.
-- 21 pagine di categoria: 5 caschi, 6 abbigliamento, 4 accessori, 6 interfoni.
-- Ricerca locale, filtri con URL condivisibile, breadcrumb, menu accessibile, FAQ e pagina 404.
-- Tre percorsi rapidi in home, guida caschi, richieste moto nuova/usata precompilate e selezione dei servizi officina.
-- Stato aperto/chiuso calcolato nel fuso Europe/Rome, orari, telefono, email, indicazioni e mappa attivabile.
-- Moduli officina e contatti con validazione, riepilogo, link alla bozza email e copia del messaggio. **Non inviano messaggi dal sito**: l’utente deve inviare la bozza dal proprio client email. Un appuntamento si conferma direttamente con l’officina.
-- Un solo recapito obbligatorio, telefono oppure email. Invio diretto predisposto tramite endpoint Formspree verificato: configurazione e limiti in `CONTACT-SETUP.md`. Endpoint vuoti nella demo, nessun invio automatico attivo.
-- Privacy della demo, fallback senza JavaScript e modalità movimento ridotto.
+Aprire http://127.0.0.1:4176/motorbike-vercelli/. Nessuna build, installazione npm o
+servizio backend è necessaria per usare il sito.
 
-## Manutenzione
+## Modifica dei contenuti
 
-`scripts/build_site.py` contiene i dati delle categorie e i componenti condivisi. Modificare qui le pagine interne e rigenerare:
+- `scripts/build_site.py`: layout condivisi, reparti, categorie, moduli, SEO e sitemap.
+- `scripts/home_content.py`: composizione e contenuti della homepage.
+- `scripts/conversion_content.py`: guide caschi, percorsi nuovo/usato e servizi officina.
+- `assets/css/premium.css`: unico CSS attivo per tutte le pagine.
+- `assets/js/pages.js`: menu, ricerca, filtri, moduli, copia e mappa.
+- `assets/js/site.js`: ingressi GSAP, reveal delle card, composizione caschi e serranda officina su home e pagine interne.
+- `assets/js/site-config.js`: eventuali endpoint pubblici; vuoti nella demo.
+- `assets/media-manifest.json`: dimensioni reali e varianti responsive delle immagini.
 
 ```sh
 python scripts/build_site.py
 ```
 
-La home resta in `index.html`; il generatore aggiorna navigazione e footer condivisi, mantenendo le scene originali. I file HTML generati sono inclusi nel repository e funzionano direttamente anche su GitHub Pages, sotto una sottocartella.
+Il generatore non richiede dipendenze. Gli HTML generati sono inclusi nel repository.
+I CSS precedenti e Lenis restano come materiale storico e non vengono caricati.
+GSAP e ScrollTrigger locali gestiscono il movimento. La scena officina resta
+fissata durante l’apertura della serranda richiesta dall’utente, poi lo scroll
+prosegue normalmente. Con movimento ridotto la foto è subito visibile, senza pin.
+Tutti i font sono locali in WOFF2, con licenza OFL.
 
-| File | Funzione |
-|---|---|
-| `assets/css/style.css`, `bike.css`, `content.css` | Design e scene della home |
-| `assets/css/pages.css` | Layout e componenti multipagina |
-| `assets/js/site.js` | GSAP, ScrollTrigger, Lenis e modulo guidato della home |
-| `assets/js/pages.js` | Menu, orari, filtri, ricerca, moduli e mappa |
-| `assets/js/search-index.js` | Indice di ricerca generato |
-| `assets/js/site-config.js` | Endpoint pubblici per l'invio diretto, vuoti nella demo |
-| `scripts/conversion_content.py` | Guide e percorsi specifici dei reparti |
-| `assets/img/reparti/SOURCES.json` | Provenienza e dimensioni delle nuove immagini |
-| `CONTENT-SOURCES.md` | Verifica editoriale e fonti |
-| `DESIGN-SYSTEM.md` | Identità e composizione |
+`scripts/prepare_assets.py` è uno strumento facoltativo di manutenzione (Pillow e
+requests): preserva gli originali, genera WebP responsive e prepara i font locali.
+Non è necessario eseguirlo per avviare o rigenerare il sito. Le fonti dei font sono
+in `assets/fonts/SOURCES.json`; le fotografie sono documentate in CONTENT-SOURCES.md.
 
-Le immagini, GSAP 3.12.5, Lenis 1.1.13 e il font del marchio sono locali. Anybody e Barlow usano Google Fonts; la mappa usa Google Maps quando attivata.
+## Funzionalità
 
-## Verifica
+Menu con tastiera, Escape e ritorno del focus; ricerca locale, filtri con URL e
+cronologia, guide ai caschi, FAQ, collegamenti telefonici/email, indicazioni Google
+Maps e mappa caricata su richiesta. Barra contatti mobile dopo lo scroll con spazio
+riservato a fondo pagina. Fallback senza JavaScript e senza GSAP.
+
+I moduli officina, moto e contatti validano i campi, preparano un riepilogo,
+aprono una bozza nel programma di posta e consentono di copiare il messaggio.
+**Non inviano email dal sito e non confermano prenotazioni.** La richiesta moto
+include nuovo/usato, marca o modello e budget facoltativo. Per attivare un invio
+diretto autorizzato vedere CONTACT-SETUP.md e aggiornare la privacy prima dell’uso.
+
+## Verifiche
 
 ```sh
 python scripts/audit_site.py
-node --check assets/js/site.js
 node --check assets/js/pages.js
-node scripts/verify_site.cjs
+node --check assets/js/site.js
+node scripts/verify_site.cjs http://127.0.0.1:4176/motorbike-vercelli/
 node scripts/verify_contact.cjs
+node scripts/verify_premium.cjs
+node scripts/verify_motion_cards.cjs
+node scripts/verify_shutter.cjs
+node scripts/lighthouse_premium.mjs
 ```
 
-La verifica browser usa Playwright e Chrome: cerca Playwright installato localmente, oppure nell’ambiente di verifica già preparato in `%TEMP%/motorbike-design-tools`. Per prepararlo in un nuovo ambiente: `npm install --no-save playwright`. Il server deve essere in ascolto sulla porta 4175.
+Le verifiche browser usano Playwright e Chrome. Le verifiche premium richiedono
+anche `@axe-core/playwright`; Lighthouse richiede `lighthouse`. Nella sessione QA
+gli strumenti sono in `.design/qa-tools`, esclusi da Git. Per prepararli:
 
-Controlli: tutte le pagine a 360, 768, 1024 e 1440 px; immagini, overflow, menu e focus, ricerca, filtri e cronologia, bozze email, mappa, navigazione dalla home, animazioni originali, fallback senza JS. Screenshot e report sono in `.design/previews/multipage/`, esclusi da Git.
+```sh
+npm install --prefix .design/qa-tools --cache .design/npm-cache --no-save playwright @axe-core/playwright lighthouse
+```
+
+Screenshot e report misurati sono in `.design/previews/premium`; i risultati
+effettivi della revisione sono in REDESIGN-REPORT.md. Non usare risultati di
+revisioni precedenti come misura del sito corrente.
 
 ## Pubblicazione
 
-Sito statico compatibile con GitHub Pages e hosting statici. Non richiede variabili d’ambiente o backend. I collegamenti relativi mantengono il funzionamento sotto `/motorbike-vercelli/`.
+Nessun e-commerce, analytics o backend attivo. Canonical e Open Graph puntano alla
+demo, mai al dominio ufficiale. La sitemap contiene le 32 pagine di contenuto;
+ricerca, privacy e 404 non sono nella sitemap. Il noindex resta in ogni pagina.
 
-Prima di trasformarlo nel sito ufficiale: confermare contenuti e diritti delle foto con il titolare, aggiornare dominio e metadati, completare l’informativa privacy per l’hosting scelto e rimuovere le indicazioni di demo e `noindex`. Per l’invio diretto dei moduli dal sito serve un servizio email/backend da configurare.
-
-La revisione conversione conserva le scene originali, accorciando l'intro e i pin di caschi/officina. Le azioni della hero restano visibili durante l'entrata del marchio. Sono disponibili eventi locali per misurare azioni; nessuno strumento di tracciamento è attivato.
+Prima del sito ufficiale confermare contenuti, orari, autorizzazioni commerciali e
+diritti delle immagini con il titolare. Aggiornare dominio, metadata, privacy e
+integrazioni; rimuovere noindex solo dopo l’autorizzazione. Le possibilità future
+sono descritte separatamente in ECOMMERCE-ROADMAP.md.

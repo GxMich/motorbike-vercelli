@@ -1,0 +1,676 @@
+{
+  "apple-touch-icon.png": {
+    "width": 180,
+    "height": 180
+  },
+  "aquile.png": {
+    "width": 255,
+    "height": 360
+  },
+  "cappellini.webp": {
+    "width": 1800,
+    "height": 1204,
+    "variants": [
+      {
+        "src": "responsive/cappellini-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/cappellini-480.webp",
+        "width": 480
+      },
+      {
+        "src": "responsive/cappellini-800.webp",
+        "width": 800
+      },
+      {
+        "src": "responsive/cappellini-1280.webp",
+        "width": 1280
+      },
+      {
+        "src": "responsive/cappellini-1800.webp",
+        "width": 1800
+      }
+    ]
+  },
+  "caschi.webp": {
+    "width": 1800,
+    "height": 1204,
+    "variants": [
+      {
+        "src": "responsive/caschi-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/caschi-480.webp",
+        "width": 480
+      },
+      {
+        "src": "responsive/caschi-800.webp",
+        "width": 800
+      },
+      {
+        "src": "responsive/caschi-1280.webp",
+        "width": 1280
+      },
+      {
+        "src": "responsive/caschi-1800.webp",
+        "width": 1800
+      }
+    ]
+  },
+  "favicon.png": {
+    "width": 64,
+    "height": 64
+  },
+  "guanti.webp": {
+    "width": 1204,
+    "height": 1800,
+    "variants": [
+      {
+        "src": "responsive/guanti-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/guanti-480.webp",
+        "width": 480
+      },
+      {
+        "src": "responsive/guanti-800.webp",
+        "width": 800
+      }
+    ]
+  },
+  "hero-rider.webp": {
+    "width": 1800,
+    "height": 1058,
+    "variants": [
+      {
+        "src": "responsive/hero-rider-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/hero-rider-480.webp",
+        "width": 480
+      },
+      {
+        "src": "responsive/hero-rider-800.webp",
+        "width": 800
+      },
+      {
+        "src": "responsive/hero-rider-1280.webp",
+        "width": 1280
+      },
+      {
+        "src": "responsive/hero-rider-1800.webp",
+        "width": 1800
+      }
+    ]
+  },
+  "ingresso-motorbike.jpg": {
+    "width": 1024,
+    "height": 1365,
+    "variants": [
+      {
+        "src": "responsive/ingresso-motorbike-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/ingresso-motorbike-480.webp",
+        "width": 480
+      },
+      {
+        "src": "responsive/ingresso-motorbike-800.webp",
+        "width": 800
+      }
+    ]
+  },
+  "ixon-racing.webp": {
+    "width": 1340,
+    "height": 660,
+    "variants": [
+      {
+        "src": "responsive/ixon-racing-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/ixon-racing-480.webp",
+        "width": 480
+      },
+      {
+        "src": "responsive/ixon-racing-800.webp",
+        "width": 800
+      },
+      {
+        "src": "responsive/ixon-racing-1280.webp",
+        "width": 1280
+      }
+    ]
+  },
+  "logo-mark-ink.png": {
+    "width": 400,
+    "height": 347
+  },
+  "logo-mark-light.png": {
+    "width": 400,
+    "height": 347
+  },
+  "logo-mark-red.png": {
+    "width": 400,
+    "height": 347
+  },
+  "negozio-insegna.webp": {
+    "width": 1800,
+    "height": 888,
+    "variants": [
+      {
+        "src": "responsive/negozio-insegna-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/negozio-insegna-480.webp",
+        "width": 480
+      },
+      {
+        "src": "responsive/negozio-insegna-800.webp",
+        "width": 800
+      },
+      {
+        "src": "responsive/negozio-insegna-1280.webp",
+        "width": 1280
+      },
+      {
+        "src": "responsive/negozio-insegna-1800.webp",
+        "width": 1800
+      }
+    ]
+  },
+  "officina.webp": {
+    "width": 1800,
+    "height": 1204,
+    "variants": [
+      {
+        "src": "responsive/officina-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/officina-480.webp",
+        "width": 480
+      },
+      {
+        "src": "responsive/officina-800.webp",
+        "width": 800
+      },
+      {
+        "src": "responsive/officina-1280.webp",
+        "width": 1280
+      },
+      {
+        "src": "responsive/officina-1800.webp",
+        "width": 1800
+      }
+    ]
+  },
+  "og-image.jpg": {
+    "width": 1200,
+    "height": 630,
+    "variants": [
+      {
+        "src": "responsive/og-image-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/og-image-480.webp",
+        "width": 480
+      },
+      {
+        "src": "responsive/og-image-800.webp",
+        "width": 800
+      }
+    ]
+  },
+  "pantaloni.webp": {
+    "width": 1800,
+    "height": 1204,
+    "variants": [
+      {
+        "src": "responsive/pantaloni-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/pantaloni-480.webp",
+        "width": 480
+      },
+      {
+        "src": "responsive/pantaloni-800.webp",
+        "width": 800
+      },
+      {
+        "src": "responsive/pantaloni-1280.webp",
+        "width": 1280
+      },
+      {
+        "src": "responsive/pantaloni-1800.webp",
+        "width": 1800
+      }
+    ]
+  },
+  "showroom-alto.webp": {
+    "width": 1800,
+    "height": 1350,
+    "variants": [
+      {
+        "src": "responsive/showroom-alto-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/showroom-alto-480.webp",
+        "width": 480
+      },
+      {
+        "src": "responsive/showroom-alto-800.webp",
+        "width": 800
+      },
+      {
+        "src": "responsive/showroom-alto-1280.webp",
+        "width": 1280
+      },
+      {
+        "src": "responsive/showroom-alto-1800.webp",
+        "width": 1800
+      }
+    ]
+  },
+  "showroom.webp": {
+    "width": 1800,
+    "height": 1204,
+    "variants": [
+      {
+        "src": "responsive/showroom-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/showroom-480.webp",
+        "width": 480
+      },
+      {
+        "src": "responsive/showroom-800.webp",
+        "width": 800
+      },
+      {
+        "src": "responsive/showroom-1280.webp",
+        "width": 1280
+      },
+      {
+        "src": "responsive/showroom-1800.webp",
+        "width": 1800
+      }
+    ],
+    "portrait": [
+      {
+        "src": "responsive/hero-store-portrait-480.webp",
+        "width": 480
+      },
+      {
+        "src": "responsive/hero-store-portrait-640.webp",
+        "width": 640
+      }
+    ]
+  },
+  "brand/beta.png": {
+    "width": 600,
+    "height": 600
+  },
+  "brand/cfmoto.png": {
+    "width": 600,
+    "height": 600
+  },
+  "brand/fantic.png": {
+    "width": 600,
+    "height": 600
+  },
+  "brand/honda.png": {
+    "width": 600,
+    "height": 600
+  },
+  "brand/kawasaki.png": {
+    "width": 600,
+    "height": 600
+  },
+  "brand/klmotors.png": {
+    "width": 600,
+    "height": 600
+  },
+  "brand/kymco.png": {
+    "width": 600,
+    "height": 600
+  },
+  "brand/mondial.png": {
+    "width": 600,
+    "height": 600
+  },
+  "brand/motoguzzi.png": {
+    "width": 600,
+    "height": 600
+  },
+  "brand/piaggio.png": {
+    "width": 600,
+    "height": 600
+  },
+  "brand/suzuki.png": {
+    "width": 600,
+    "height": 600
+  },
+  "reparti/accessori-vari.webp": {
+    "width": 627,
+    "height": 694,
+    "variants": [
+      {
+        "src": "responsive/reparti-accessori-vari-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/reparti-accessori-vari-480.webp",
+        "width": 480
+      }
+    ]
+  },
+  "reparti/cardo.webp": {
+    "width": 600,
+    "height": 600,
+    "variants": [
+      {
+        "src": "responsive/reparti-cardo-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/reparti-cardo-480.webp",
+        "width": 480
+      }
+    ]
+  },
+  "reparti/cross.webp": {
+    "width": 1200,
+    "height": 400,
+    "variants": [
+      {
+        "src": "responsive/reparti-cross-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/reparti-cross-480.webp",
+        "width": 480
+      },
+      {
+        "src": "responsive/reparti-cross-800.webp",
+        "width": 800
+      }
+    ]
+  },
+  "reparti/crossover.webp": {
+    "width": 600,
+    "height": 600,
+    "variants": [
+      {
+        "src": "responsive/reparti-crossover-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/reparti-crossover-480.webp",
+        "width": 480
+      }
+    ]
+  },
+  "reparti/giacche.webp": {
+    "width": 1200,
+    "height": 800,
+    "variants": [
+      {
+        "src": "responsive/reparti-giacche-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/reparti-giacche-480.webp",
+        "width": 480
+      },
+      {
+        "src": "responsive/reparti-giacche-800.webp",
+        "width": 800
+      }
+    ]
+  },
+  "reparti/guanti.webp": {
+    "width": 1200,
+    "height": 801,
+    "variants": [
+      {
+        "src": "responsive/reparti-guanti-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/reparti-guanti-480.webp",
+        "width": 480
+      },
+      {
+        "src": "responsive/reparti-guanti-800.webp",
+        "width": 800
+      }
+    ]
+  },
+  "reparti/hjc.webp": {
+    "width": 600,
+    "height": 600,
+    "variants": [
+      {
+        "src": "responsive/reparti-hjc-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/reparti-hjc-480.webp",
+        "width": 480
+      }
+    ]
+  },
+  "reparti/integrali.webp": {
+    "width": 600,
+    "height": 600,
+    "variants": [
+      {
+        "src": "responsive/reparti-integrali-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/reparti-integrali-480.webp",
+        "width": 480
+      }
+    ]
+  },
+  "reparti/interphone.webp": {
+    "width": 600,
+    "height": 600,
+    "variants": [
+      {
+        "src": "responsive/reparti-interphone-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/reparti-interphone-480.webp",
+        "width": 480
+      }
+    ]
+  },
+  "reparti/jet.webp": {
+    "width": 600,
+    "height": 600,
+    "variants": [
+      {
+        "src": "responsive/reparti-jet-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/reparti-jet-480.webp",
+        "width": 480
+      }
+    ]
+  },
+  "reparti/lubrificanti.webp": {
+    "width": 371,
+    "height": 400
+  },
+  "reparti/midland.webp": {
+    "width": 600,
+    "height": 600,
+    "variants": [
+      {
+        "src": "responsive/reparti-midland-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/reparti-midland-480.webp",
+        "width": 480
+      }
+    ]
+  },
+  "reparti/modulari.webp": {
+    "width": 600,
+    "height": 600,
+    "variants": [
+      {
+        "src": "responsive/reparti-modulari-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/reparti-modulari-480.webp",
+        "width": 480
+      }
+    ]
+  },
+  "reparti/n-com.webp": {
+    "width": 600,
+    "height": 600,
+    "variants": [
+      {
+        "src": "responsive/reparti-n-com-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/reparti-n-com-480.webp",
+        "width": 480
+      }
+    ]
+  },
+  "reparti/off-road.webp": {
+    "width": 1056,
+    "height": 1000,
+    "variants": [
+      {
+        "src": "responsive/reparti-off-road-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/reparti-off-road-480.webp",
+        "width": 480
+      },
+      {
+        "src": "responsive/reparti-off-road-800.webp",
+        "width": 800
+      }
+    ]
+  },
+  "reparti/pantaloni.webp": {
+    "width": 700,
+    "height": 700,
+    "variants": [
+      {
+        "src": "responsive/reparti-pantaloni-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/reparti-pantaloni-480.webp",
+        "width": 480
+      }
+    ]
+  },
+  "reparti/pneumatici.webp": {
+    "width": 1131,
+    "height": 1000,
+    "variants": [
+      {
+        "src": "responsive/reparti-pneumatici-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/reparti-pneumatici-480.webp",
+        "width": 480
+      },
+      {
+        "src": "responsive/reparti-pneumatici-800.webp",
+        "width": 800
+      }
+    ]
+  },
+  "reparti/scarichi.webp": {
+    "width": 564,
+    "height": 575,
+    "variants": [
+      {
+        "src": "responsive/reparti-scarichi-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/reparti-scarichi-480.webp",
+        "width": 480
+      }
+    ]
+  },
+  "reparti/scarpe.webp": {
+    "width": 800,
+    "height": 801,
+    "variants": [
+      {
+        "src": "responsive/reparti-scarpe-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/reparti-scarpe-480.webp",
+        "width": 480
+      },
+      {
+        "src": "responsive/reparti-scarpe-800.webp",
+        "width": 800
+      }
+    ]
+  },
+  "reparti/sena.webp": {
+    "width": 600,
+    "height": 600,
+    "variants": [
+      {
+        "src": "responsive/reparti-sena-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/reparti-sena-480.webp",
+        "width": 480
+      }
+    ]
+  },
+  "reparti/stivali.webp": {
+    "width": 409,
+    "height": 394
+  },
+  "reparti/tute.webp": {
+    "width": 600,
+    "height": 600,
+    "variants": [
+      {
+        "src": "responsive/reparti-tute-320.webp",
+        "width": 320
+      },
+      {
+        "src": "responsive/reparti-tute-480.webp",
+        "width": 480
+      }
+    ]
+  }
+}

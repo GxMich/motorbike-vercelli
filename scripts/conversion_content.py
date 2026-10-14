@@ -1,16 +1,5 @@
 """Focused department journeys, using real existing media and verified services."""
 
-def home_paths():
-    return '''<section class="intent-section" id="parti" aria-labelledby="intent-title"><div class="wrap">
-      <div class="intent-heading"><h2 id="intent-title">Da dove vuoi partire?</h2><p>Tre modi per fare un giro da Motorbike.</p></div>
-      <div class="intent-grid">
-        <a class="intent-card" href="caschi.html#scegli"><img src="assets/img/caschi.webp" alt="Caschi nel nostro negozio" width="1800" height="1204" loading="lazy"><div><h3>Cerco un casco</h3><p>Confronta le tipologie. Trova la calzata in negozio.</p><span>Trova il tuo tipo di casco</span></div></a>
-        <a class="intent-card" href="moto.html#proposte"><img src="assets/img/showroom-alto.webp" alt="Moto in esposizione nel negozio" width="1800" height="1350" loading="lazy"><div><h3>Cerco una moto</h3><p>Nuova o usata, raccontaci la tua prossima strada.</p><span>Chiedi le proposte disponibili</span></div></a>
-        <a class="intent-card" href="officina.html#richiesta"><img src="assets/img/officina.webp" alt="Un intervento nella nostra officina" width="1800" height="1204" loading="lazy"><div><h3>Mi serve l’officina</h3><p>Tagliando, pneumatici o ricambi. Parliamone.</p><span>Richiedi un intervento</span></div></a>
-      </div>
-      <div class="trust-ribbon"><a href="https://tytanu.com/annuncio/negozi-abbigliamento-moto/piemonte/motorbike-vercelli/" target="_blank" rel="noopener"><strong>4,8 / 5</strong><span>195 recensioni riportate da Tytanu</span></a><span>Caschi e capi da provare in negozio</span><a href="contatti.html"><strong>Via Trino 200</strong><span>Negozio e officina, a Vercelli</span></a></div>
-    </div></section>'''
-
 def helmet_guide():
     return '''<section class="choice-section light" id="scegli" aria-labelledby="choice-title"><div class="wrap"><div class="choice-heading"><h2 class="display" id="choice-title">Come vivi la moto?</h2><p>Parti dal tuo percorso. La scelta finale si fa provando il casco.</p></div><div class="choice-grid">
       <a href="caschi.html?categoria=Citt%C3%A0#scopri"><span>Tragitti in città</span><h3>Esplora i jet</h3><p>Confronta visiera, calzata e ingombro.</p></a>

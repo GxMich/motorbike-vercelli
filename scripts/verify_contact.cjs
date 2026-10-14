@@ -1,6 +1,6 @@
 // Verify both form modes. All external submissions are intercepted; no email is sent.
 let playwright;
-try {playwright=require('playwright');} catch {playwright=require(require('path').join(require('os').tmpdir(),'motorbike-design-tools/node_modules/playwright'));}
+try {playwright=require('playwright');} catch {try {playwright=require(require('path').resolve('.design/qa-tools/node_modules/playwright'));} catch {playwright=require(require('path').join(require('os').tmpdir(),'motorbike-design-tools/node_modules/playwright'));}}
 const fs=require('fs');
 const checks=[];
 function check(value,label){checks.push({label,passed:Boolean(value)});if(!value)throw new Error(label);}
@@ -23,6 +23,8 @@ function check(value,label){checks.push({label,passed:Boolean(value)});if(!value
     check(decodeURIComponent(await page.locator('[data-email-link]').getAttribute('href')).includes('Telefono: +39 333 1234567'),'Phone preserved in draft');
     await page.goto('http://127.0.0.1:4175/moto.html');
     await page.locator('a[href*="esigenza=Moto%20usata"]').click();
+    await page.waitForURL('**/contatti.html?**');
+    await page.waitForFunction(()=>document.querySelector('#messaggio-input')?.value.includes('moto usata'));
     check((await page.locator('#messaggio-input').inputValue()).includes('moto usata'),'Used-bike intent prefilled');
     await page.goto('http://127.0.0.1:4175/caschi.html');
     await page.locator('a[href*="categoria=Turismo"]').click();
@@ -59,7 +61,7 @@ function check(value,label){checks.push({label,passed:Boolean(value)});if(!value
     await page.waitForFunction(()=>document.querySelector('[data-form-status]').dataset.kind==='error');
     check(await page.locator('[data-preview]').isVisible(),'Network failure retains email alternative');
     await page.goto('http://127.0.0.1:4175/index.html');
-    check(await page.locator('[data-request-form]').count()===1,'Home uses the same simplified request flow');
+    check(await page.locator('.home-workshop a[href="officina.html"]').count()===1,'Home links to the dedicated workshop request flow');
     await page.goto('http://127.0.0.1:4175/caschi.html');
     const opening=await page.locator('#menu-open').boundingBox();await page.locator('#menu-open').click();
     await page.waitForFunction(()=>document.activeElement.id==='menu-close');const closing=await page.locator('#menu-close').boundingBox();

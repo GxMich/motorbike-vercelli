@@ -1,7 +1,7 @@
 // Browser smoke and user-flow verification against the served static site.
 let playwright;
 try { playwright = require('playwright'); }
-catch { playwright = require(require('path').join(require('os').tmpdir(),'motorbike-design-tools/node_modules/playwright')); }
+catch { try {playwright = require(require('path').resolve('.design/qa-tools/node_modules/playwright'));} catch {playwright = require(require('path').join(require('os').tmpdir(),'motorbike-design-tools/node_modules/playwright'));} }
 const { chromium } = playwright;
 const fs = require('fs');
 const path = require('path');
@@ -9,6 +9,7 @@ const pages = fs.readdirSync('.').filter(p=>p.endsWith('.html')&&p!=='proposta.h
 const out = path.resolve('.design/previews/multipage');
 fs.mkdirSync(out,{recursive:true});
 const checks=[], errors=[], failures=[];
+const base=(process.argv[2]||'http://127.0.0.1:4175/').replace(/\/?$/,'/');
 function check(value,label) {checks.push({label,passed:Boolean(value)});if(!value) console.log('FAIL:',label);}
 (async()=>{
   const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});
@@ -17,15 +18,16 @@ function check(value,label) {checks.push({label,passed:Boolean(value)});if(!valu
     const page=await context.newPage();
     page.on('pageerror',e=>errors.push(String(e)));
     page.on('response',r=>{if(r.status()>=400&&r.url().startsWith('http://127.0.0.1'))failures.push(`${r.status()} ${r.url()}`);});
-    for(const width of [360,768,1024,1440]) {
+    for(const width of [320,375,390,768,1280,1920]) {
       await page.setViewportSize({width,height:900});
       for(const file of pages) {
-        await page.goto(`http://127.0.0.1:4175/${file}`,{waitUntil:'load'});
+        await page.goto(`${base}${file}`,{waitUntil:'load'});
         await page.evaluate(()=>document.fonts.ready);
         const result=await page.evaluate(()=>({overflow:document.documentElement.scrollWidth>innerWidth+1,h1:document.querySelectorAll('h1').length,broken:[...document.images].filter(i=>i.complete&&!i.naturalWidth).map(i=>i.src),menuHidden:document.getElementById('menu').inert}));
         check(!result.overflow,`${file}: ${width}px no horizontal overflow`);
         check(result.h1===1&&result.broken.length===0&&result.menuHidden,`${file}: ${width}px heading, assets, closed menu`);
-        if(['index.html','caschi.html','officina.html','contatti.html','caschi-integrali.html','negozio.html'].includes(file)&&[360,1440].includes(width)) await page.screenshot({path:path.join(out,`${file.slice(0,-5)}-${width}.png`)});
+        check(await page.locator('meta[name="robots"]').getAttribute('content')==='noindex, nofollow',`${file}: ${width}px demo excluded from indexing`);
+        if(['index.html','caschi.html','officina.html','contatti.html','moto.html','abbigliamento.html','negozio.html'].includes(file)&&[390,1280].includes(width)) await page.screenshot({path:path.join(out,`${file.slice(0,-5)}-${width}.png`)});
       }
       console.log('Verified width',width,pages.length,'pages');
     }
@@ -79,9 +81,11 @@ function check(value,label) {checks.push({label,passed:Boolean(value)});if(!valu
     const motion=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'no-preference'});
     const mp=await motion.newPage();mp.on('pageerror',e=>errors.push(String(e)));
     await mp.goto('http://127.0.0.1:4175/index.html');
-    await mp.waitForTimeout(3500);
-    check(await mp.locator('#ignition').count()===0,'Home ignition completes');
-    check(await mp.evaluate(()=>ScrollTrigger.getAll().filter(t=>t.pin).length)>=3,'Original pinned animation scenes remain');
+    check(await mp.locator('#ignition').count()===0,'No mandatory introduction');
+    check(await mp.locator('.home-hero .btn').first().isVisible(),'Hero action immediately usable');
+    await mp.waitForFunction(()=>document.documentElement.dataset.motionReady==='true');
+    check(await mp.evaluate(()=>!window.Lenis&&ScrollTrigger.getAll().every(t=>!t.pin||t.vars.id==='workshop-shutter')),'Native scroll with only the requested workshop pin');
+    await mp.waitForTimeout(800);
     await mp.screenshot({path:path.join(out,'home-motion.png')});
     await mp.locator('#menu-open').click();
     check(await mp.locator('#menu').evaluate(el=>!el.inert),'Home menu enabled');
