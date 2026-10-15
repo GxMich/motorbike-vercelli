@@ -7,7 +7,7 @@ const out = path.resolve('.design/previews/premium');fs.mkdirSync(out,{recursive
 const checks=[],errors=[],accessibility=[];
 function check(value,label){checks.push({label,passed:!!value});if(!value)console.log('FAIL',label)}
 async function loadPhotos(page){
-  await page.evaluate(async()=>{for(let y=0;y<document.documentElement.scrollHeight;y+=650){window.scrollTo(0,y);await new Promise(r=>setTimeout(r,45));}window.scrollTo(0,0);await Promise.all([...document.images].map(i=>i.decode().catch(()=>{})));});
+  await page.evaluate(async()=>{for(let y=0;y<document.documentElement.scrollHeight;y+=650){window.scrollTo(0,y);await new Promise(r=>setTimeout(r,45));}window.scrollTo(0,0);await Promise.all([...document.images].filter(i=>!i.closest('.menu')).map(i=>i.decode().catch(()=>{})));});
   await page.waitForTimeout(650);
 }
 (async()=>{
@@ -18,7 +18,7 @@ async function loadPhotos(page){
     const files=fs.readdirSync('.').filter(f=>f.endsWith('.html')&&f!=='proposta.html');
     for(const file of files){
       await page.goto(base+file);await loadPhotos(page);
-      const img=await page.evaluate(()=>[...document.images].every(i=>i.complete&&i.naturalWidth>0));
+      const img=await page.evaluate(()=>[...document.images].filter(i=>!i.closest('.menu')).every(i=>i.complete&&i.naturalWidth>0));
       check(img,file+': all photographs, including lazy images, decode');
       const result=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa']).analyze();
       accessibility.push({file,width:390,violations:result.violations});

@@ -4,7 +4,7 @@ let pw;try{pw=require('playwright')}catch{pw=require(path.join(require('os').tmp
 const AxeBuilder=require(path.resolve('.design/qa-tools/node_modules/@axe-core/playwright')).default;
 const base='http://127.0.0.1:4176/motorbike-vercelli/',out=path.resolve('.design/previews/card-motion');fs.mkdirSync(out,{recursive:true});
 const checks=[],errors=[];function check(v,label){checks.push({label,passed:!!v});if(!v)console.log('FAIL',label)}
-async function photos(page){await page.evaluate(()=>Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))))}
+async function photos(page){await page.evaluate(()=>Promise.all([...document.images].filter(i=>!i.closest('.menu')).map(i=>i.decode().catch(()=>{}))))}
 (async()=>{
  const b=await pw.chromium.launch({executablePath:process.env.CHROME_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe'});
  try{

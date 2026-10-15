@@ -24,11 +24,11 @@ servizio backend è necessaria per usare il sito.
 ## Modifica dei contenuti
 
 - `scripts/build_site.py`: layout condivisi, reparti, categorie, moduli, SEO e sitemap.
-- `scripts/home_content.py`: composizione e contenuti della homepage.
+- `scripts/home_content.py`: composizione "Paddock Racing" della homepage (partenza, manifesto, linee, reparti, griglia marchi, pit stop, prova, club, traguardo).
 - `scripts/conversion_content.py`: guide caschi, percorsi nuovo/usato e servizi officina.
 - `assets/css/premium.css`: unico CSS attivo per tutte le pagine.
 - `assets/js/pages.js`: menu, ricerca, filtri, moduli, copia e mappa.
-- `assets/js/site.js`: ingressi GSAP, reveal delle card, composizione caschi e serranda officina su home e pagine interne.
+- `assets/js/site.js`: motion system GSAP (preloader, tendina tra le pagine, titoli a maschera, ticker, reparti orizzontali, serranda officina, cursore e pulsanti magnetici, Lenis solo su desktop).
 - `assets/js/site-config.js`: eventuali endpoint pubblici; vuoti nella demo.
 - `assets/media-manifest.json`: dimensioni reali e varianti responsive delle immagini.
 
@@ -37,11 +37,13 @@ python scripts/build_site.py
 ```
 
 Il generatore non richiede dipendenze. Gli HTML generati sono inclusi nel repository.
-I CSS precedenti e Lenis restano come materiale storico e non vengono caricati.
-GSAP e ScrollTrigger locali gestiscono il movimento. La scena officina resta
+I CSS precedenti restano come materiale storico e non vengono caricati.
+GSAP e ScrollTrigger locali gestiscono il movimento; Lenis rende morbido lo scroll
+con la rotella solo su desktop, mentre su touch lo scroll resta nativo. La scena officina resta
 fissata durante l’apertura della serranda richiesta dall’utente, poi lo scroll
 prosegue normalmente. Con movimento ridotto la foto è subito visibile, senza pin.
-Tutti i font sono locali in WOFF2, con licenza OFL.
+Tutti i font sono locali in WOFF2, con licenza OFL: Barlow per il testo e il logo,
+Saira variabile (sottoinsieme latino) per i titoli.
 
 `scripts/prepare_assets.py` è uno strumento facoltativo di manutenzione (Pillow e
 requests): preserva gli originali, genera WebP responsive e prepara i font locali.
@@ -75,7 +77,8 @@ node scripts/verify_shutter.cjs
 node scripts/lighthouse_premium.mjs
 ```
 
-Le verifiche browser usano Playwright e Chrome. Le verifiche premium richiedono
+Le verifiche browser usano Playwright e Chrome; `CHROME_PATH` indica un eseguibile
+diverso da quello predefinito di Windows. Le verifiche premium richiedono
 anche `@axe-core/playwright`; Lighthouse richiede `lighthouse`. Nella sessione QA
 gli strumenti sono in `.design/qa-tools`, esclusi da Git. Per prepararli:
 
