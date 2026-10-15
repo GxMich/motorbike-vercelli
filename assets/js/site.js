@@ -90,6 +90,23 @@
     }
     return [...heading.querySelectorAll('.line-inner')];
   };
+  // Wrap each word of a plain-text block in a span, keeping the spaces as text.
+  const splitWords = block => {
+    if (block.dataset.split !== 'words') {
+      block.dataset.split = 'words';
+      const text = block.textContent;
+      block.textContent = '';
+      text.split(/(\s+)/).forEach(part => {
+        if (!part) return;
+        if (/^\s+$/.test(part)) { block.append(part); return; }
+        const word = document.createElement('span');
+        word.className = 'word';
+        word.textContent = part;
+        block.append(word);
+      });
+    }
+    return [...block.querySelectorAll('.word')];
+  };
   const drawHighlights = (targets, timeline, position) => {
     if (targets.length) timeline.fromTo(targets, { backgroundSize: '0% .075em' }, {
       backgroundSize: '100% .075em', duration: 1.1, ease: 'expo.inOut'
@@ -151,13 +168,16 @@
       const lines = title ? splitLines(title) : [];
       const homeHero = document.querySelector('.home-hero');
       if (homeHero) {
-        tl.fromTo(homeHero.querySelector('.home-hero-photo'), { scale: 1.16 }, { scale: 1, duration: 2.8, ease: 'power2.out' }, 0)
-          .from(homeHero.querySelector('.hero-location'), { y: 20, opacity: 0, duration: .9 }, .2)
-          .from(lines, { yPercent: 118, rotate: 3, transformOrigin: '0% 100%', duration: 1.3, stagger: .11 }, .15)
-          .from(homeHero.querySelector('.hero-description'), { y: 26, opacity: 0, duration: 1 }, .55)
-          .from(homeHero.querySelectorAll('.hero-foot .btn'), { y: 26, opacity: 0, duration: 1, stagger: .08 }, .7)
-          .from(homeHero.querySelector('.hero-bottomline'), { opacity: 0, duration: 1 }, .95);
-        drawHighlights(homeHero.querySelectorAll('.hl'), tl, .8);
+        // The claim arrives like two bikes off the line, from opposite sides.
+        tl.fromTo(homeHero.querySelector('.home-hero-photo'), { scale: 1.22 }, { scale: 1, duration: 2.8, ease: 'power3.out' }, 0)
+          .from(homeHero.querySelector('.hero-tag'), { x: -30, opacity: 0, duration: .9 }, .25)
+          .from(lines[0], { xPercent: -60, skewX: 18, opacity: 0, duration: 1.3 }, .1)
+          .from(lines[1], { xPercent: 60, skewX: 18, opacity: 0, duration: 1.3 }, .22)
+          .from(homeHero.querySelector('.hero-description'), { y: 26, opacity: 0, duration: 1 }, .6)
+          .from(homeHero.querySelectorAll('.hero-foot .btn'), { y: 26, opacity: 0, duration: 1, stagger: .08 }, .72)
+          .from(homeHero.querySelector('.hero-band .kerb'), { scaleX: 0, transformOrigin: '0% 50%', duration: 1.2, ease: 'expo.inOut' }, .45)
+          .from(homeHero.querySelector('.ticker'), { yPercent: 100, duration: 1 }, .8);
+        drawHighlights(homeHero.querySelectorAll('.hl'), tl, .9);
       } else if (title) {
         const hero = title.closest('section');
         tl.from(hero.querySelector('.breadcrumb'), { y: -12, opacity: 0, duration: .8 }, 0)
@@ -197,23 +217,70 @@
     };
 
     const setupScenes = () => {
-      /* Hero: on scroll the photograph contracts into a rounded card while the
-         next chapter slides over it; on desktop the scene holds still underneath. */
+      /* Hero: the photograph falls behind, the claim splits towards the edges. */
       const homeHero = document.querySelector('.home-hero');
       if (homeHero) {
-        const out = gsap.timeline({ scrollTrigger: {
-          trigger: homeHero, start: 'top top', end: 'bottom top', scrub: true,
-          pin: desktop, pinSpacing: false, refreshPriority: 3, invalidateOnRefresh: true
-        } });
-        out.to(homeHero.querySelector('.hero-media'), { clipPath: desktop ? 'inset(6% 3% 14% 3% round 32px)' : 'inset(4% 3% 8% 3% round 22px)', ease: 'none' }, 0)
-          .to(homeHero.querySelector('.home-hero-inner'), { yPercent: desktop ? -10 : -16, opacity: 0, ease: 'power1.in' }, 0);
+        const out = gsap.timeline({ scrollTrigger: { trigger: homeHero, start: 'top top', end: 'bottom top', scrub: true } });
+        out.to(homeHero.querySelector('.hero-media'), { yPercent: 28, scale: 1.08, ease: 'none' }, 0)
+          .to(homeHero.querySelector('.hero-foot'), { y: -40, opacity: 0, ease: 'power1.in' }, 0);
         const titleLines = homeHero.querySelectorAll('.hero-title-line');
-        if (desktop && titleLines.length === 2) out.to(titleLines[0], { xPercent: -6, ease: 'none' }, 0).to(titleLines[1], { xPercent: 6, ease: 'none' }, 0);
+        if (titleLines.length === 2) out.to(titleLines[0], { xPercent: desktop ? -18 : -10, ease: 'none' }, 0).to(titleLines[1], { xPercent: desktop ? 18 : 10, ease: 'none' }, 0);
       }
+
+      /* Ticker: speeds up with scroll velocity and follows its direction. */
+      document.querySelectorAll('.ticker-track').forEach(track => {
+        const loop = track.getAnimations?.()[0];
+        if (!loop) return;
+        // Start far into the infinite loop so playing it backwards never reaches the start.
+        loop.currentTime = (loop.effect.getTiming().duration || 46000) * 500;
+        const ease = { rate: 1 };
+        const steer = gsap.quickTo(ease, 'rate', { duration: .8, ease: 'power3', onUpdate: () => { loop.playbackRate = ease.rate; } });
+        ScrollTrigger.create({ trigger: track, start: 'top bottom', end: 'bottom top', onUpdate: self => {
+          const speed = Math.min(5, 1 + Math.abs(self.getVelocity()) / 600);
+          steer(self.direction < 0 ? -speed : speed);
+          gsap.delayedCall(.15, () => steer(self.direction < 0 ? -1 : 1));
+        } });
+        cleanups.push(() => { loop.playbackRate = 1; });
+      });
+
+      /* Kerbs run sideways as the page moves. */
+      document.querySelectorAll('.kerb, .checker').forEach(stripe => {
+        gsap.fromTo(stripe, { backgroundPositionX: '0px' }, { backgroundPositionX: desktop ? '-260px' : '-120px', ease: 'none',
+          scrollTrigger: { trigger: stripe, start: 'top bottom', end: 'bottom top', scrub: true } });
+      });
+
+      /* Manifesto: words light up in reading order as the section scrolls by. */
+      const manifesto = document.querySelector('.manifesto');
+      if (manifesto) {
+        const words = splitWords(manifesto);
+        gsap.fromTo(words, { opacity: .16 }, { opacity: 1, ease: 'none', stagger: .1,
+          scrollTrigger: { trigger: manifesto, start: 'top 82%', end: 'bottom 45%', scrub: true } });
+      }
+      document.querySelectorAll('[data-count]').forEach(number => {
+        const target = +number.dataset.count, state = { value: 0 };
+        gsap.to(state, { value: target, duration: 1.6, ease: 'power3.out',
+          onUpdate: () => { number.textContent = String(Math.round(state.value)).padStart(2, '0'); },
+          scrollTrigger: { trigger: number, start: 'top 90%', once: true } });
+        cleanups.push(() => { number.textContent = String(target).padStart(2, '0'); });
+      });
+      reveal(document.querySelectorAll('.stats > div'), '.stats', { stagger: .1 });
+
+      /* Racing line panels open from the bottom, one after another. */
+      document.querySelectorAll('.line-panel').forEach((panel, index) => {
+        const tl = gsap.timeline({ scrollTrigger: { trigger: panel, start: 'top 88%', once: true }, delay: index * .08 });
+        tl.fromTo(panel, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.4, ease: 'expo.inOut', clearProps: 'clipPath' }, 0)
+          .from(panel.querySelector('img'), { scale: 1.35, duration: 2, ease: 'expo.out', clearProps: 'transform' }, .1)
+          .from(panel.querySelector('.line-pos'), { xPercent: -40, opacity: 0, duration: 1.2, ease: 'expo.out', clearProps: 'transform,opacity' }, .5)
+          .from(panel.querySelector('.line-copy').children, { y: 24, opacity: 0, duration: 1, stagger: .06, ease: 'expo.out', clearProps: 'transform,opacity' }, .6);
+      });
+
+      /* Starting grid: brands line up slot by slot. */
+      const grid = document.querySelector('.starting-grid');
+      if (grid) reveal(grid.children, grid, { y: 60, stagger: .05, duration: 1.2 });
 
       /* Departments: a pinned horizontal story on wide screens. */
       const departments = document.querySelector('.home-departments');
-      const track = departments?.querySelector('.department-grid');
+      const track = departments?.querySelector('.race-track');
       if (departments && track && wide) {
         departments.classList.add('is-hscroll');
         cleanups.push(() => departments.classList.remove('is-hscroll'));
@@ -237,12 +304,18 @@
         });
         cleanups.push(() => { if (count) count.textContent = '01'; if (bar) bar.style.removeProperty('transform'); });
         gsap.from(tiles, {
-          x: 140, opacity: 0, duration: 1.3, stagger: .07, ease: 'expo.out', clearProps: 'transform,opacity',
+          x: 160, opacity: 0, duration: 1.3, stagger: .07, ease: 'expo.out', clearProps: 'transform,opacity',
           scrollTrigger: { trigger: departments, start: 'top 65%', once: true }
+        });
+        // Race numbers slide out of their cards as each one crosses the screen.
+        tiles.forEach(tile => {
+          const number = tile.querySelector('.race-number');
+          if (number) gsap.fromTo(number, { xPercent: -30 }, { xPercent: 30, ease: 'none',
+            scrollTrigger: { trigger: tile, containerAnimation: horizontal, start: 'left right', end: 'right left', scrub: true } });
         });
         // Each photograph drifts inside its frame as the row travels.
         tiles.forEach(tile => {
-          const photo = tile.querySelector('.tile-media > img');
+          const photo = tile.querySelector('.race-media img');
           if (photo) gsap.fromTo(photo, { xPercent: -6, scale: 1.16 }, {
             xPercent: 6, scale: 1.16, ease: 'none',
             scrollTrigger: { trigger: tile, containerAnimation: horizontal, start: 'left right', end: 'right left', scrub: true }
@@ -250,8 +323,9 @@
         });
       } else if (track) {
         [...track.children].forEach((tile, index) => {
-          reveal([tile.querySelector('.tile-copy')], tile, { delay: (index % 2) * .06 });
-          revealImage(tile.querySelector('.tile-media'), tile.querySelector('.tile-media > img'));
+          revealImage(tile, tile.querySelector('.race-media img'));
+          reveal(tile.querySelector('.race-copy').children, tile, { delay: .3 + (index % 2) * .06, stagger: .06 });
+          reveal([tile.querySelector('.race-number')], tile, { x: -40, y: 0, delay: .4 });
         });
       }
       document.querySelectorAll('.helmet-fan').forEach(fan => {
@@ -264,7 +338,7 @@
       });
 
       /* Dark chapters widen to full bleed as they arrive. */
-      document.querySelectorAll('.home-workshop, .home-visit').forEach(section => {
+      document.querySelectorAll('.home-workshop').forEach(section => {
         gsap.fromTo(section, { '--panel-x': (desktop ? 44 : 12) + 'px', '--panel-r': (desktop ? 36 : 22) + 'px' }, {
           '--panel-x': '0px', '--panel-r': '0px', ease: 'none',
           scrollTrigger: { trigger: section, start: 'top bottom', end: 'top 20%', scrub: true }
@@ -318,17 +392,13 @@
       });
 
       /* Typography: masked line reveals on every chapter title. */
-      document.querySelectorAll('main h2.display, .home-paths h2').forEach(revealHeading);
-      document.querySelectorAll('.section-kicker').forEach(kicker => reveal([kicker], kicker, { x: -24, y: 0 }));
-      document.querySelectorAll('.home-paths .section-heading > p, .home-departments .section-heading > p, .workshop-copy, .store-copy > p:not(.section-kicker), .store-copy > .text-link, .home-visit address, .home-visit .content-actions, .visit-email, .choice-heading p, .page-cta p, .page-cta .btn, .detail-layout > div, .contact-aside, .club-feature > div, .story-split > div, .faq-items, .visit-details > div').forEach(el => reveal([el], el));
-      document.querySelectorAll('.service-list, .visit-hours dl, .journey, .editorial-grid, .brand-wall, .choice-grid, .moto-request-grid, .department-list, .search-results').forEach(list => reveal(list.children, list, { stagger: .07 }));
+      document.querySelectorAll('main h2.display, .community-row h2').forEach(revealHeading);
+      document.querySelectorAll('.eyebrow, .section-kicker').forEach(kicker => reveal([kicker], kicker, { x: -30, y: 0 }));
+      document.querySelectorAll('.section-lead, .grid-actions, .workshop-copy, .store-copy > p:not(.section-kicker), .store-copy > .text-link, .home-visit address, .home-visit .content-actions, .visit-email, .choice-heading p, .page-cta p, .page-cta .btn, .detail-layout > div, .contact-aside, .club-feature > div, .story-split > div, .faq-items, .visit-details > div').forEach(el => reveal([el], el));
+      document.querySelectorAll('.pit-board, .visit-hours dl, .journey, .editorial-grid, .brand-wall, .choice-grid, .moto-request-grid, .department-list, .search-results').forEach(list => reveal(list.children, list, { stagger: .07 }));
       document.querySelectorAll('.visit-hours').forEach(card => revealImage(card));
 
       /* Images: masked reveals, then contained depth during scroll. */
-      document.querySelectorAll('.path-card').forEach((card, index) => {
-        revealImage(card, card.querySelector('img'));
-        gsap.from(card.querySelector('div'), { y: 30, opacity: 0, duration: 1.2, delay: .25 + index * .05, ease: 'expo.out', clearProps: 'transform,opacity', scrollTrigger: { trigger: card, start: 'top 90%', once: true } });
-      });
       document.querySelectorAll('.story-split > img, .arrival-grid figure img, .club-feature > img').forEach(image => revealImage(image));
       document.querySelectorAll('.store-photo-frame').forEach(frame => {
         const photo = frame.querySelector('img');
@@ -431,7 +501,7 @@
       document.body.append(cursor);
       const toX = gsap.quickTo(cursor, 'x', { duration: .5, ease: 'power3' });
       const toY = gsap.quickTo(cursor, 'y', { duration: .5, ease: 'power3' });
-      const labels = [['.department-tile, .category-card a, .path-card', 'Esplora'], ['.brand-wall a', 'Chiedi']];
+      const labels = [['.race-card, .line-panel, .category-card a', 'Esplora'], ['.grid-slot, .brand-wall a', 'Chiedi']];
       const onMove = event => { toX(event.clientX); toY(event.clientY); cursor.classList.add('is-visible'); };
       const onOver = event => {
         const labelled = labels.find(([selector]) => event.target.closest?.(selector));
@@ -448,7 +518,7 @@
       root.addEventListener('pointerleave', onLeave);
       window.addEventListener('pointerdown', onDown);
       window.addEventListener('pointerup', onUp);
-      const magnets = [...document.querySelectorAll('.btn-red, .menu-btn, .search-button, .hero-foot .btn-ghost')].map(el => {
+      const magnets = [...document.querySelectorAll('.btn-red, .btn-dark, .btn-light, .header-call, .menu-btn, .search-button, .hero-foot .btn-ghost')].map(el => {
         const toMX = gsap.quickTo(el, 'x', { duration: .6, ease: 'power3' });
         const toMY = gsap.quickTo(el, 'y', { duration: .6, ease: 'power3' });
         const move = event => {

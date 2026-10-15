@@ -31,6 +31,7 @@ def header(current):
     return f'''<header class="top" id="top"><div class="wrap">
       <a class="logo" href="index.html" aria-label="Motorbike Vercelli, home"><img src="assets/img/logo-mark-light.png" alt="" width="400" height="347"><span>Motorbike <small>Vercelli</small></span></a>
       <nav class="header-nav" aria-label="Navigazione principale">{links}</nav>
+      <a class="header-call" href="tel:+390161294987"><span>Chiama</span> 0161 294987</a>
       <a class="search-button" href="ricerca.html" aria-label="Cerca nel sito"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></a>
       <button class="btn btn-ghost menu-btn" type="button" id="menu-open" aria-expanded="false" aria-controls="menu"><svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg><span>Menu</span></button>
     </div></header>
@@ -43,7 +44,7 @@ def header(current):
     <div class="page-curtain" aria-hidden="true"><span class="curtain-mark"><img src="assets/img/logo-mark-light.png" alt="" width="400" height="347">Motorbike</span></div>'''
 
 def footer():
-    return f'''<footer class="foot" aria-label="Informazioni e collegamenti"><div class="wrap">
+    return f'''<footer class="foot" aria-label="Informazioni e collegamenti"><div class="kerb" aria-hidden="true"></div><div class="wrap">
       <div class="foot-invite"><p>Moto, abbigliamento e officina.<br><strong>Ci vediamo in Via Trino.</strong></p>{link('contatti','Organizza la tua visita','text-link')}</div>
       <a class="foot-brand" href="index.html" aria-label="Motorbike Vercelli, home"><span class="foot-word">Motorbike</span> <span class="foot-city">Vercelli</span></a>
       <div class="foot-grid">
@@ -170,7 +171,7 @@ def write(slug, title, desc, content, parent=None):
     if slug == 'index':
         schema['about'] = {'@type':'MotorcycleDealer','name':'Motorbike Vercelli','url':'https://www.motorbikevercelli.com/','telephone':'+390161294987','email':'motorbikevercelli@gmail.com','address':{'@type':'PostalAddress','streetAddress':'Via Trino 200','postalCode':'13100','addressLocality':'Vercelli','addressRegion':'VC','addressCountry':'IT'}}
     canonical = DEMO + ('' if slug == 'index' else slug + '.html')
-    motion = '<script src="assets/vendor/gsap.min.js" defer></script><script src="assets/js/site.js?v=20261015-experience" defer></script>'
+    motion = '<script src="assets/vendor/gsap.min.js" defer></script><script src="assets/js/site.js?v=20261015-paddock" defer></script>'
     search_script = '<script src="assets/js/search-index.js" defer></script>' if slug == 'ricerca' else ''
     body_class = 'home-page' if slug == 'index' else 'inner-page page-' + (parent or slug)
     html = f'''<!doctype html>
@@ -192,13 +193,13 @@ def write(slug, title, desc, content, parent=None):
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/img/favicon.png">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
-  <link rel="preload" href="assets/fonts/BarlowCondensed-ExtraBoldItalic.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/css/premium.css?v=20261015-experience">
+  <link rel="preload" href="assets/fonts/Saira-Italic-Var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/premium.css?v=20261015-paddock">
   {HEAD_SCRIPT}
   <script type="application/ld+json">{json.dumps(schema,ensure_ascii=False)}</script>
   <script src="assets/js/site-config.js" defer></script>
   {search_script}
-  <script src="assets/js/pages.js?v=20261015-experience" defer></script>
+  <script src="assets/js/pages.js?v=20261015-paddock" defer></script>
   {motion}
 </head>
 <body class="{body_class}">
