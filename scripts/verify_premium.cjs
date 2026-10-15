@@ -41,6 +41,8 @@ async function loadPhotos(page){
     const map=await page.locator('.home-hero a[href*="google.com/maps/dir"]').getAttribute('href');
     check(map.includes('api=1')&&map.includes('Via+Trino+200'),'Store CTA contains Google Maps directions and correct address');
     // Mobile menu focus cycles both directions and Escape restores the opener.
+    // The header steps aside after the jump to #reparti; keyboard focus brings it back.
+    await page.locator('#menu-open').focus();await page.waitForTimeout(800);
     await page.locator('#menu-open').click();await page.waitForFunction(()=>document.activeElement.id==='menu-close');
     await page.keyboard.press('Shift+Tab');check(await page.evaluate(()=>document.activeElement.closest('#menu')!==null),'Backward menu focus is trapped');
     await page.keyboard.press('Tab');check(await page.locator('#menu-close').evaluate(el=>el===document.activeElement),'Forward menu focus wraps');
@@ -88,7 +90,9 @@ async function loadPhotos(page){
       check(!result.violations.length,file+': desktop axe');accessibility.push({file,width:1280,violations:result.violations});
       await page.screenshot({path:path.join(out,file.replace('.html','')+'-1280-full.png'),fullPage:true});
     }
-    await page.emulateMedia({reducedMotion:'no-preference'});await page.goto(base+'index.html');await page.waitForTimeout(1400);
+    await page.emulateMedia({reducedMotion:'no-preference'});await page.goto(base+'index.html');
+    // Preloader plus the cinematic hero intro last about four seconds, then everything rests.
+    await page.waitForFunction(()=>document.documentElement.dataset.motionReady==='true');await page.waitForTimeout(4200);
     check(await page.evaluate(()=>gsap.globalTimeline.getChildren().filter(t=>t.isActive()).length===0),'Hero motion completes without continuous animation');
     await page.emulateMedia({reducedMotion:'reduce'});
     check(await page.locator('#home-title .hero-title-line').first().evaluate(el=>getComputedStyle(el).transform==='none')&&await page.evaluate(()=>ScrollTrigger.getAll().length===0),'Changing reduced motion at runtime restores static title and removes scroll motion');
