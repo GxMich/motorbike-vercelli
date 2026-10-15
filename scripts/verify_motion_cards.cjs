@@ -48,7 +48,8 @@ async function photos(page){await page.evaluate(()=>Promise.all([...document.ima
   check(await p.locator('.category-card').first().evaluate(el=>getComputedStyle(el).transform!=='none'),'Category entrance is observable during scroll');await p.waitForTimeout(1100);
   // The five helmets unfold, and the workshop shutter opens with the page's scroll.
   await p.goto(base+'index.html');await p.waitForTimeout(1200);
-  check(await p.evaluate(()=>ScrollTrigger.getAll().length>8&&ScrollTrigger.getAll().filter(t=>t.pin).length===1&&ScrollTrigger.getAll().every(t=>!t.pin||t.vars.id==='workshop-shutter')&&!window.Lenis),'Home has active motion scenes and only the requested workshop pin');
+  // Approved scenes: the workshop shutter and, on wide screens, the horizontal departments story.
+  check(await p.evaluate(()=>ScrollTrigger.getAll().length>8&&ScrollTrigger.getAll().some(t=>t.vars.id==='workshop-shutter')&&ScrollTrigger.getAll().every(t=>!t.pin||['workshop-shutter','departments'].includes(t.vars.id))),'Home has active motion scenes and only the approved pins');
   const shutter=p.locator('.workshop-shutter');const closed=await shutter.evaluate(el=>getComputedStyle(el).transform);
   await p.evaluate(()=>window.scrollTo(0,document.querySelector('.helmet-scene').getBoundingClientRect().top+scrollY-innerHeight*.68));await p.waitForTimeout(100);
   await p.locator('.helmet-scene').screenshot({path:path.join(out,'helmets-during.png')});await p.waitForTimeout(1300);

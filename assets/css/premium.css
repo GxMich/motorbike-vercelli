@@ -452,7 +452,7 @@ p{margin:0 0 1em;max-width:66ch}
    =================================================================== */
 @font-face{font-family:Saira;src:url('../fonts/Saira-Var.woff2') format('woff2');font-weight:500 900;font-stretch:100% 125%;font-style:normal;font-display:swap}
 @font-face{font-family:Saira;src:url('../fonts/Saira-Italic-Var.woff2') format('woff2');font-weight:500 900;font-stretch:100% 125%;font-style:italic;font-display:swap}
-:root{--night:#0d0e0f;--night-2:#16181a;--white:#f4f2ed;--mute:#b3b8bc;--red:#d4202a;--red-deep:#a5141c;--ink:#0d0e0f;--ink-mute:#4d5257;--concrete:#f1efe9;--concrete-2:#e4e1d9;--concrete-line:#cfccc4;--line:#33373b;--race:Saira,'Barlow Condensed','Arial Narrow',sans-serif;--ease-out:cubic-bezier(.16,1,.3,1);--ease-io:cubic-bezier(.76,0,.24,1);--skew:-14deg;--radius:4px}
+:root{--night:#0d0e0f;--night-2:#16181a;--white:#f4f2ed;--mute:#b3b8bc;--red:#c81d26;--red-deep:#9e1219;--ink:#0d0e0f;--ink-mute:#4d5257;--concrete:#f1efe9;--concrete-2:#e4e1d9;--concrete-line:#cfccc4;--line:#33373b;--race:Saira,'Barlow Condensed','Arial Narrow',sans-serif;--ease-out:cubic-bezier(.16,1,.3,1);--ease-io:cubic-bezier(.76,0,.24,1);--skew:-14deg;--radius:4px}
 body{background:var(--night)}
 ::selection{background:var(--red);color:#fff}
 
@@ -590,7 +590,7 @@ html.lenis,html.lenis body{height:auto}
 .home-hero .home-hero-inner{flex:1;height:auto;min-height:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:stretch;padding-top:108px;padding-bottom:30px}
 .hero-tag{display:flex;align-items:center;gap:14px;margin:0 0 auto;font-family:var(--race);font-style:italic;font-weight:700;font-stretch:110%;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
 .hero-tag span:not(.hero-dot){color:var(--mute);border-left:1px solid #ffffff55;padding-left:14px}
-.hero-dot{width:9px;height:9px;border-radius:50%;background:var(--red);box-shadow:0 0 0 4px #d4202a40}
+.hero-dot{width:9px;height:9px;border-radius:50%;background:var(--red);box-shadow:0 0 0 4px #c81d2640}
 .home-hero .hero-title{display:flex;flex-direction:column;margin:0 0 clamp(20px,3.4svh,40px);font-family:var(--race);font-style:italic;font-weight:900;font-stretch:125%;text-transform:uppercase;letter-spacing:-.025em;line-height:.84;font-size:clamp(46px,min(9.4vw,17svh),190px);max-width:none}
 .hero-title-right{align-self:flex-end;text-align:right}
 .hero-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:24px 48px;flex-wrap:wrap}
@@ -687,12 +687,12 @@ html.lenis,html.lenis body{height:auto}
 .pit .kerb-top{position:absolute;top:0;left:0;right:0;clip-path:inset(0 var(--panel-x,0px))}
 .pit .eyebrow::before{background:#fff}
 .pit h2.display{font-size:clamp(72px,11vw,200px);line-height:.84}
-.pit .workshop-copy>p:not(.eyebrow):not(.small-note){color:#fff;opacity:.92;margin-top:26px}
+.pit .workshop-copy>p:not(.eyebrow):not(.small-note){color:#fff;margin-top:26px}
 .pit-board{list-style:none;margin:28px 0 32px;padding:0;border-top:1px solid #ffffff59}
 .pit-board li{display:flex;align-items:baseline;gap:18px;padding:14px 0;border-bottom:1px solid #ffffff59;font-family:var(--race);font-style:italic;font-weight:750;font-stretch:112%;text-transform:uppercase;font-size:clamp(17px,1.5vw,22px)}
 .pit-board span{font-weight:900;font-stretch:125%;font-size:.8em;opacity:.7}
 .pit .text-link{background-image:linear-gradient(#fff,#fff),linear-gradient(#ffffff80,#ffffff80)}
-.pit .small-note,.pit figcaption{color:#ffffffd9}
+.pit .small-note,.pit figcaption{color:#fff}
 .pit :focus-visible{outline-color:#fff}
 .workshop-scene,.workshop-photo img{border-radius:var(--radius)}
 .shutter-label{border-left:0;box-shadow:inset 5px 0 var(--red);font-family:var(--race);font-weight:900;font-stretch:125%;text-transform:uppercase}
@@ -753,7 +753,7 @@ html.lenis,html.lenis body{height:auto}
 .map-placeholder,.brand-wall{overflow:hidden}
 .faq-items summary{font-family:var(--race);font-style:italic;font-weight:750;font-stretch:108%;font-size:clamp(17px,1.6vw,22px)}
 .page-cta{position:relative;background:var(--red);color:#fff;border-top:0;padding-block:clamp(56px,7vw,96px)}
-.page-cta p{color:#ffffffe0}
+.page-cta p{color:#fff}
 .page-cta .btn-red{--btn-bg:#fff;--btn-line:#fff;--btn-fill:var(--ink);--btn-hover:#fff;color:var(--ink)}
 .page-cta .btn-ghost,.page-cta .btn-ghost:hover{--btn-line:#fff;--btn-fill:#fff;--btn-hover:var(--red);color:#fff}
 .page-cta :focus-visible{outline-color:#fff}

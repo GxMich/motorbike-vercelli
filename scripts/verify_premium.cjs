@@ -32,7 +32,7 @@ async function loadPhotos(page){
       check(await page.locator('h1').isVisible(),'Menu navigates to '+slug);
     }
     await page.goto(base+'index.html');
-    check(await page.locator('.home-paths a').count()===3,'Three initial commercial paths');
+    check(await page.locator('.line-panel').count()===3,'Three initial commercial paths');
     await page.locator('.home-hero a[href="#reparti"]').click();
     check(page.url().endsWith('#reparti'),'Hero department CTA reaches the department section');
     await page.locator('.department-tile[href="officina.html"]').count(); // workshop is a separate feature
