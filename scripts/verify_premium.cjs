@@ -11,7 +11,7 @@ async function loadPhotos(page){
   await page.waitForTimeout(650);
 }
 (async()=>{
-  const browser=await pw.chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'});
+  const browser=await pw.chromium.launch({executablePath:process.env.CHROME_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe'});
   try{
     const context=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce',permissions:['clipboard-read','clipboard-write']});
     const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));

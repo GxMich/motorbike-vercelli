@@ -5,7 +5,7 @@ const fs=require('fs');
 const checks=[];
 function check(value,label){checks.push({label,passed:Boolean(value)});if(!value)throw new Error(label);}
 (async()=>{
-  const browser=await playwright.chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});
+  const browser=await playwright.chromium.launch({executablePath:process.env.CHROME_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});
   try {
     const page=await browser.newPage({reducedMotion:'reduce',viewport:{width:390,height:844}});
     let payloads=[];

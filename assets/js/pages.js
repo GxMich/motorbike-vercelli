@@ -14,6 +14,8 @@
       $('#main').inert = active;
       $('.foot').inert = active;
       $('#top').inert = active;
+      $('#top').classList.remove('is-hidden');
+      document.dispatchEvent(new CustomEvent('motorbike:menu', { detail: { open: active } }));
       if (active) requestAnimationFrame(() => { if (menu.classList.contains('open')) close.focus({ preventScroll: true }); });
       else open.focus({ preventScroll: true });
     };
@@ -29,10 +31,29 @@
         if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
       }
     });
+    // The header floats as a pill after the opening, steps aside while the
+    // reader moves down and returns on the first upward scroll or keyboard focus.
+    const top = $('#top');
+    let lastY = window.scrollY;
     const paintHeader = () => {
-      $('#top').classList.toggle('scrolled', window.scrollY > 40);
-      document.body.classList.toggle('has-mobile-actions',window.scrollY > 180);
+      const y = window.scrollY, delta = y - lastY;
+      top.classList.toggle('scrolled', y > 40);
+      if (y < 160 || delta < -6 || top.contains(document.activeElement)) top.classList.remove('is-hidden');
+      else if (delta > 6) top.classList.add('is-hidden');
+      if (Math.abs(delta) > 6 || y < 160) lastY = y;
+      document.body.classList.toggle('has-mobile-actions',y > 180);
     };
+    top.addEventListener('focusin', () => top.classList.remove('is-hidden'));
+    // Wide screens show a photograph of the page under the pointer or focus.
+    const previews = $$('.menu-preview img', menu);
+    const showPreview = (index) => previews.forEach((img, i) => img.classList.toggle('is-active', i === index));
+    const current = $$('a[data-menu-preview]', menu).findIndex(a => a.hasAttribute('aria-current'));
+    showPreview(Math.max(0, current));
+    $$('a[data-menu-preview]', menu).forEach(a => {
+      const show = () => showPreview(+a.dataset.menuPreview);
+      a.addEventListener('mouseenter', show);
+      a.addEventListener('focus', show);
+    });
     window.addEventListener('scroll', paintHeader,{passive:true});
     paintHeader();
     $$('[data-year]').forEach(el => {el.textContent = new Date().getFullYear();});

@@ -6,7 +6,7 @@ const base='http://127.0.0.1:4176/motorbike-vercelli/',out=path.resolve('.design
 const checks=[],errors=[];function check(v,label){checks.push({label,passed:!!v});if(!v)console.log('FAIL',label)}
 async function photos(page){await page.evaluate(()=>Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))))}
 (async()=>{
- const b=await pw.chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'});
+ const b=await pw.chromium.launch({executablePath:process.env.CHROME_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe'});
  try{
   const c=await b.newContext({viewport:{width:1280,height:900},reducedMotion:'reduce'});const p=await c.newPage();p.on('pageerror',e=>errors.push(e.message));
   for(const width of [320,375,390,768,1280,1920]){

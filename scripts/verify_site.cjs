@@ -12,7 +12,7 @@ const checks=[], errors=[], failures=[];
 const base=(process.argv[2]||'http://127.0.0.1:4175/').replace(/\/?$/,'/');
 function check(value,label) {checks.push({label,passed:Boolean(value)});if(!value) console.log('FAIL:',label);}
 (async()=>{
-  const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});
+  const browser=await chromium.launch({executablePath:process.env.CHROME_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true});
   try {
     const context=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
     const page=await context.newPage();
