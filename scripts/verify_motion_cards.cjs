@@ -37,7 +37,7 @@ async function photos(page){await page.evaluate(()=>Promise.all([...document.ima
   check(await card.locator('.category-image img').evaluate(el=>getComputedStyle(el).transform!=='none'),'Hover visibly scales category photograph');
   const after=await card.boundingBox();check(Math.abs(size.width-after.width)<1&&Math.abs(size.height-after.height)<1,'Hover keeps card dimensions stable');
   await p.locator('[data-filter="Turismo"]').click();await p.waitForTimeout(700);
-  check(await p.locator('.category-card:visible').count()===1&&(await p.locator('.category-card:visible h3').innerText())==='Modulari','Animated filter keeps the correct category visible');
+  check(await p.locator('.category-card:visible').count()===1&&(await p.locator('.category-card:visible h3').textContent()).trim()==='Modulari','Animated filter keeps the correct category visible');
   await p.emulateMedia({reducedMotion:'reduce'});
   await p.waitForFunction(()=>ScrollTrigger.getAll().length===0);
   check(await p.evaluate(()=>[...document.querySelectorAll('.category-card')].every(el=>getComputedStyle(el).opacity==='1')&&ScrollTrigger.getAll().length===0),'Reducing motion after a filter leaves all card content opaque');

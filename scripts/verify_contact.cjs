@@ -29,7 +29,7 @@ function check(value,label){checks.push({label,passed:Boolean(value)});if(!value
     await page.goto('http://127.0.0.1:4175/caschi.html');
     await page.locator('a[href*="categoria=Turismo"]').click();
     await page.waitForFunction(()=>document.querySelector('[data-filter="Turismo"]')?.getAttribute('aria-pressed')==='true');
-    check(await page.locator('.category-card:visible').count()===1&&(await page.locator('.category-card:visible h3').innerText()).includes('Modulari'),'Helmet guide opens correct filtered category');
+    check(await page.locator('.category-card:visible').count()===1&&(await page.locator('.category-card:visible h3').innerText()).toLowerCase().includes('modulari'),'Helmet guide opens correct filtered category');
     await page.goto('http://127.0.0.1:4175/officina.html');
     await page.locator('[data-service="Cambio pneumatici"]').click();
     check(await page.locator('#argomento').inputValue()==='Cambio pneumatici','Service links preselect workshop request');
@@ -37,7 +37,7 @@ function check(value,label){checks.push({label,passed:Boolean(value)});if(!value
     await page.route('**/assets/js/site-config.js',route=>route.fulfill({contentType:'application/javascript',body:"window.MOTORBIKE_CONFIG={contactEndpoint:'https://formspree.io/f/testform',workshopEndpoint:''};"}));
     async function fill(){await page.locator('#nome').fill('Cliente test');await page.locator('#recapito').fill('test@example.com');await page.locator('#messaggio-input').fill('Vorrei concordare una prova in negozio.');}
     await page.goto('http://127.0.0.1:4175/contatti.html');
-    check(await page.locator('[data-send]').innerText()==='Invia la richiesta','Configured endpoint enables direct submission');
+    check((await page.locator('[data-send]').textContent()).trim()==='Invia la richiesta','Configured endpoint enables direct submission');
     await fill();
     await page.locator('[data-send]').click();
     check(await page.locator('[data-send]').isDisabled(),'Submit disabled during delivery');

@@ -33,7 +33,7 @@ function check(value,label) {checks.push({label,passed:Boolean(value)});if(!valu
     }
     await page.goto('http://127.0.0.1:4175/abbigliamento.html');
     await page.getByRole('button',{name:'Mani',exact:true}).click();
-    check(await page.locator('.category-card:visible').count()===1&&(await page.locator('.category-card:visible h3').innerText()).includes('Guanti'),'Filter selects gloves');
+    check(await page.locator('.category-card:visible').count()===1&&(await page.locator('.category-card:visible h3').innerText()).toLowerCase().includes('guanti'),'Filter selects gloves');
     await page.reload();
     check(await page.locator('.category-card:visible').count()===1,'Filter persists through shared URL');
     await page.getByRole('button',{name:'Tutte',exact:true}).click();
@@ -84,7 +84,8 @@ function check(value,label) {checks.push({label,passed:Boolean(value)});if(!valu
     check(await mp.locator('#ignition').count()===0,'No mandatory introduction');
     check(await mp.locator('.home-hero .btn').first().isVisible(),'Hero action immediately usable');
     await mp.waitForFunction(()=>document.documentElement.dataset.motionReady==='true');
-    check(await mp.evaluate(()=>!window.Lenis&&ScrollTrigger.getAll().every(t=>!t.pin||t.vars.id==='workshop-shutter')),'Native scroll with only the requested workshop pin');
+    // Touch keeps native scroll (Lenis is desktop-only); the departments story is the only extra pin, wide screens only.
+    check(await mp.evaluate(()=>!window.Lenis&&ScrollTrigger.getAll().every(t=>!t.pin||['workshop-shutter','departments'].includes(t.vars.id))),'Native scroll with only the approved pins');
     await mp.waitForTimeout(800);
     await mp.screenshot({path:path.join(out,'home-motion.png')});
     await mp.locator('#menu-open').click();

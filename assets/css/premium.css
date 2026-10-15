@@ -815,6 +815,9 @@ html.lenis,html.lenis body{height:auto}
 @media(max-width:480px){
   .home-hero .content-actions{width:100%}
   .home-hero .btn{flex:1;padding-inline:16px;white-space:nowrap}
-  .grid-badge{position:static;margin-top:2px}
+  .grid-slot{min-width:0;overflow:hidden}
+  .grid-badge{position:static;max-width:100%;margin-top:2px;padding:2px 6px;font-size:8.5px;letter-spacing:.03em}
+  .page-hero h1,.search-page h1,.legal-page h1{font-size:clamp(28px,9vw,48px);font-stretch:106%}
+  .page-section .section-title,.page-cta h2,.choice-heading h2,.moto-request-section h2{font-stretch:108%}
 }
 @media(prefers-reduced-motion:reduce){.page-curtain,.preloader,.cursor{display:none!important}.menu,.menu li a{transform:none}.ticker-track{animation:none}}
