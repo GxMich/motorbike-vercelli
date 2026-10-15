@@ -84,8 +84,8 @@ function check(value,label) {checks.push({label,passed:Boolean(value)});if(!valu
     check(await mp.locator('#ignition').count()===0,'No mandatory introduction');
     check(await mp.locator('.home-hero .btn').first().isVisible(),'Hero action immediately usable');
     await mp.waitForFunction(()=>document.documentElement.dataset.motionReady==='true');
-    // Touch keeps native scroll (Lenis is desktop-only); the departments story is the only extra pin, wide screens only.
-    check(await mp.evaluate(()=>!window.Lenis&&ScrollTrigger.getAll().every(t=>!t.pin||['workshop-shutter','departments'].includes(t.vars.id))),'Native scroll with only the approved pins');
+    // Desktop uses approved smooth wheel scrolling (touch stays native); only the approved scenes are pinned.
+    check(await mp.evaluate(()=>ScrollTrigger.getAll().every(t=>!t.pin||['workshop-shutter','departments'].includes(t.vars.id))),'Only the approved scenes are pinned');
     await mp.waitForTimeout(800);
     await mp.screenshot({path:path.join(out,'home-motion.png')});
     await mp.locator('#menu-open').click();
