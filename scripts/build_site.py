@@ -11,29 +11,40 @@ MAP = 'https://www.google.com/maps/dir/?api=1&amp;destination=Motorbike+Vercelli
 NAV = [('negozio','Il negozio'),('moto','Moto'),('caschi','Caschi'),('abbigliamento','Abbigliamento'),('interfoni','Interfoni'),('cross','Cross'),('accessori','Accessori'),('officina','Officina'),('club','Aquile Vercellesi'),('contatti','Contatti')]
 TITLE = dict(NAV)
 DEMO = 'https://gxmich.github.io/motorbike-vercelli/'
+MENU_PREVIEW = {'index':'showroom.webp','negozio':'negozio-insegna.webp','moto':'hero-rider.webp','caschi':'caschi.webp','abbigliamento':'ixon-racing.webp','interfoni':'reparti/cardo.webp','cross':'reparti/cross.webp','accessori':'reparti/pneumatici.webp','officina':'officina.webp','club':'ingresso-motorbike.jpg','contatti':'negozio-insegna.webp'}
+# Runs before first paint: curtain on internal navigation, preloader on a fresh homepage visit.
+HEAD_SCRIPT = "<script>(function(h){h.classList.replace('no-js','js');try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var n=performance.getEntriesByType('navigation')[0],t=n?n.type:'navigate',r=document.referrer&&new URL(document.referrer).origin===location.origin;if(t==='back_forward')return;if(r&&t==='navigate')h.classList.add('is-entering');else if(h.hasAttribute('data-preload'))h.classList.add('is-preloading')}catch(e){}})(document.documentElement)</script>"
 MEDIA = json.loads((ROOT / 'assets/media-manifest.json').read_text(encoding='utf-8')) if (ROOT / 'assets/media-manifest.json').exists() else {}
 
 def link(slug, label=None, cls=''):
     return f'<a href="{slug}.html" class="{cls}">{label or TITLE.get(slug, slug)}</a>'
 
+PRELOADER = '<div class="preloader" aria-hidden="true"><div class="preloader-inner"><img src="assets/img/logo-mark-light.png" alt="" width="400" height="347"><span class="preloader-word">Motorbike</span><span class="preloader-meta"><span>Vercelli · Via Trino 200</span><span class="preloader-count">000</span></span><span class="preloader-bar"><i></i></span></div></div>'
+
 def header(current):
     primary = [('caschi','Caschi'),('abbigliamento','Abbigliamento'),('moto','Moto'),('officina','Officina'),('contatti','Contatti')]
     links = ''.join(f'<a href="{s}.html"'+ (' aria-current="page"' if s == current else '') +f'>{n}</a>' for s,n in primary)
-    menu = ''.join(f'<li><a href="{s}.html"'+ (' aria-current="page"' if s == current else '') +f'>{n}</a></li>' for s,n in [('index','Home')]+NAV)
+    pages = [('index','Home')]+NAV
+    menu = ''.join(f'<li style="--i:{i}"><a href="{s}.html" data-menu-preview="{i}"'+ (' aria-current="page"' if s == current else '') +f'>{n}</a></li>' for i,(s,n) in enumerate(pages))
+    # Decorative previews for wide screens; lazy images load only when shown.
+    previews = ''.join(image(MENU_PREVIEW.get(s,'showroom.webp'),'',sizes='(min-width: 1100px) 32vw, 1px') for s,_ in pages)
     return f'''<header class="top" id="top"><div class="wrap">
       <a class="logo" href="index.html" aria-label="Motorbike Vercelli, home"><img src="assets/img/logo-mark-light.png" alt="" width="400" height="347"><span>Motorbike <small>Vercelli</small></span></a>
       <nav class="header-nav" aria-label="Navigazione principale">{links}</nav>
+      <a class="header-call" href="tel:+390161294987"><span>Chiama</span> 0161 294987</a>
       <a class="search-button" href="ricerca.html" aria-label="Cerca nel sito"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></a>
       <button class="btn btn-ghost menu-btn" type="button" id="menu-open" aria-expanded="false" aria-controls="menu"><svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg><span>Menu</span></button>
     </div></header>
     <div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Esplora Motorbike" inert>
       <div class="menu-head wrap"><span>Fai un giro da noi</span><button class="btn btn-ghost menu-btn menu-close" type="button" id="menu-close"><svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg><span>Chiudi</span></button></div>
       <nav class="wrap" aria-label="Tutte le pagine"><ol>{menu}</ol></nav>
+      <div class="menu-preview" aria-hidden="true">{previews}</div>
       <div class="menu-foot wrap"><span>Via Trino 200, Vercelli</span><a href="tel:+390161294987">0161 294987</a><a href="ricerca.html">Cerca un reparto</a><small>Proposta dimostrativa non ufficiale</small></div>
-    </div>'''
+    </div>
+    <div class="page-curtain" aria-hidden="true"><span class="curtain-mark"><img src="assets/img/logo-mark-light.png" alt="" width="400" height="347">Motorbike</span></div>'''
 
 def footer():
-    return f'''<footer class="foot" aria-label="Informazioni e collegamenti"><div class="wrap">
+    return f'''<footer class="foot" aria-label="Informazioni e collegamenti"><div class="kerb" aria-hidden="true"></div><div class="wrap">
       <div class="foot-invite"><p>Moto, abbigliamento e officina.<br><strong>Ci vediamo in Via Trino.</strong></p>{link('contatti','Organizza la tua visita','text-link')}</div>
       <a class="foot-brand" href="index.html" aria-label="Motorbike Vercelli, home"><span class="foot-word">Motorbike</span> <span class="foot-city">Vercelli</span></a>
       <div class="foot-grid">
@@ -160,11 +171,11 @@ def write(slug, title, desc, content, parent=None):
     if slug == 'index':
         schema['about'] = {'@type':'MotorcycleDealer','name':'Motorbike Vercelli','url':'https://www.motorbikevercelli.com/','telephone':'+390161294987','email':'motorbikevercelli@gmail.com','address':{'@type':'PostalAddress','streetAddress':'Via Trino 200','postalCode':'13100','addressLocality':'Vercelli','addressRegion':'VC','addressCountry':'IT'}}
     canonical = DEMO + ('' if slug == 'index' else slug + '.html')
-    motion = '<script src="assets/vendor/gsap.min.js" defer></script><script src="assets/js/site.js?v=20261014-shutter-group" defer></script>'
+    motion = '<script src="assets/vendor/gsap.min.js" defer></script><script src="assets/js/site.js?v=20261015-paddock" defer></script>'
     search_script = '<script src="assets/js/search-index.js" defer></script>' if slug == 'ricerca' else ''
     body_class = 'home-page' if slug == 'index' else 'inner-page page-' + (parent or slug)
     html = f'''<!doctype html>
-<html lang="it" class="no-js">
+<html lang="it" class="no-js"{' data-preload' if slug == 'index' else ''}>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -182,18 +193,18 @@ def write(slug, title, desc, content, parent=None):
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/img/favicon.png">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
-  <link rel="preload" href="assets/fonts/BarlowCondensed-Bold.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/css/premium.css?v=20261014-motion">
-  <script>document.documentElement.classList.replace('no-js','js');</script>
+  <link rel="preload" href="assets/fonts/Saira-Italic-Var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/premium.css?v=20261015-paddock">
+  {HEAD_SCRIPT}
   <script type="application/ld+json">{json.dumps(schema,ensure_ascii=False)}</script>
   <script src="assets/js/site-config.js" defer></script>
   {search_script}
-  <script src="assets/js/pages.js?v=20261014" defer></script>
+  <script src="assets/js/pages.js?v=20261015-paddock" defer></script>
   {motion}
 </head>
 <body class="{body_class}">
   <a class="skip" href="#main">Vai al contenuto</a>
-  {header(parent or slug)}
+  {PRELOADER if slug == 'index' else ''}{header(parent or slug)}
   <main id="main">{content}</main>
   {footer()}
 </body>

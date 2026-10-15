@@ -18,5 +18,17 @@
     "file": "BarlowCondensed-Bold.woff2",
     "source": "https://fonts.gstatic.com/s/barlowcondensed/v13/HTxwL3I-JCGChYJ8VI-L6OO_au7B46r2z3bWuQ.woff2",
     "license": "OFL-BarlowCondensed.txt"
+  },
+  {
+    "file": "Saira-Var.woff2",
+    "source": "https://github.com/google/fonts/blob/main/ofl/saira/Saira%5Bwdth,wght%5D.ttf",
+    "license": "OFL-Saira.txt",
+    "note": "Variable subset: wght 500-900, wdth 100-125, Latin-1 and punctuation."
+  },
+  {
+    "file": "Saira-Italic-Var.woff2",
+    "source": "https://github.com/google/fonts/blob/main/ofl/saira/Saira-Italic%5Bwdth,wght%5D.ttf",
+    "license": "OFL-Saira.txt",
+    "note": "Variable subset: wght 500-900, wdth 100-125, Latin-1 and punctuation."
   }
 ]

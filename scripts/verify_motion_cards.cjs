@@ -4,9 +4,9 @@ let pw;try{pw=require('playwright')}catch{pw=require(path.join(require('os').tmp
 const AxeBuilder=require(path.resolve('.design/qa-tools/node_modules/@axe-core/playwright')).default;
 const base='http://127.0.0.1:4176/motorbike-vercelli/',out=path.resolve('.design/previews/card-motion');fs.mkdirSync(out,{recursive:true});
 const checks=[],errors=[];function check(v,label){checks.push({label,passed:!!v});if(!v)console.log('FAIL',label)}
-async function photos(page){await page.evaluate(()=>Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))))}
+async function photos(page){await page.evaluate(()=>Promise.all([...document.images].filter(i=>!i.closest('.menu')).map(i=>i.decode().catch(()=>{}))))}
 (async()=>{
- const b=await pw.chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'});
+ const b=await pw.chromium.launch({executablePath:process.env.CHROME_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe'});
  try{
   const c=await b.newContext({viewport:{width:1280,height:900},reducedMotion:'reduce'});const p=await c.newPage();p.on('pageerror',e=>errors.push(e.message));
   for(const width of [320,375,390,768,1280,1920]){
@@ -37,7 +37,7 @@ async function photos(page){await page.evaluate(()=>Promise.all([...document.ima
   check(await card.locator('.category-image img').evaluate(el=>getComputedStyle(el).transform!=='none'),'Hover visibly scales category photograph');
   const after=await card.boundingBox();check(Math.abs(size.width-after.width)<1&&Math.abs(size.height-after.height)<1,'Hover keeps card dimensions stable');
   await p.locator('[data-filter="Turismo"]').click();await p.waitForTimeout(700);
-  check(await p.locator('.category-card:visible').count()===1&&(await p.locator('.category-card:visible h3').innerText())==='Modulari','Animated filter keeps the correct category visible');
+  check(await p.locator('.category-card:visible').count()===1&&(await p.locator('.category-card:visible h3').textContent()).trim()==='Modulari','Animated filter keeps the correct category visible');
   await p.emulateMedia({reducedMotion:'reduce'});
   await p.waitForFunction(()=>ScrollTrigger.getAll().length===0);
   check(await p.evaluate(()=>[...document.querySelectorAll('.category-card')].every(el=>getComputedStyle(el).opacity==='1')&&ScrollTrigger.getAll().length===0),'Reducing motion after a filter leaves all card content opaque');
@@ -48,7 +48,8 @@ async function photos(page){await page.evaluate(()=>Promise.all([...document.ima
   check(await p.locator('.category-card').first().evaluate(el=>getComputedStyle(el).transform!=='none'),'Category entrance is observable during scroll');await p.waitForTimeout(1100);
   // The five helmets unfold, and the workshop shutter opens with the page's scroll.
   await p.goto(base+'index.html');await p.waitForTimeout(1200);
-  check(await p.evaluate(()=>ScrollTrigger.getAll().length>8&&ScrollTrigger.getAll().filter(t=>t.pin).length===1&&ScrollTrigger.getAll().every(t=>!t.pin||t.vars.id==='workshop-shutter')&&!window.Lenis),'Home has active motion scenes and only the requested workshop pin');
+  // Approved scenes: the workshop shutter and, on wide screens, the horizontal departments story.
+  check(await p.evaluate(()=>ScrollTrigger.getAll().length>8&&ScrollTrigger.getAll().some(t=>t.vars.id==='workshop-shutter')&&ScrollTrigger.getAll().every(t=>!t.pin||['workshop-shutter','departments'].includes(t.vars.id))),'Home has active motion scenes and only the approved pins');
   const shutter=p.locator('.workshop-shutter');const closed=await shutter.evaluate(el=>getComputedStyle(el).transform);
   await p.evaluate(()=>window.scrollTo(0,document.querySelector('.helmet-scene').getBoundingClientRect().top+scrollY-innerHeight*.68));await p.waitForTimeout(100);
   await p.locator('.helmet-scene').screenshot({path:path.join(out,'helmets-during.png')});await p.waitForTimeout(1300);

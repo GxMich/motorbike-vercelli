@@ -6,7 +6,7 @@ function check(value,label){checks.push({label,passed:!!value});if(!value)consol
 async function opening(page){return page.locator('.workshop-shutter').evaluate(el=>{const matrix=getComputedStyle(el).transform;return matrix==='none'?0:-new DOMMatrixReadOnly(matrix).m42/el.getBoundingClientRect().height})}
 async function scroll(page,y){await page.evaluate(y=>window.scrollTo(0,y),y);await page.waitForTimeout(550)}
 (async()=>{
- const browser=await pw.chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe'});
+ const browser=await pw.chromium.launch({executablePath:process.env.CHROME_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe'});
  try{
   const context=await browser.newContext({reducedMotion:'no-preference'});const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
   for(const [width,height] of [[320,900],[375,900],[390,844],[768,900],[1280,900],[1920,900],[844,390]]){
@@ -51,7 +51,8 @@ async function scroll(page,y){await page.evaluate(y=>window.scrollTo(0,y),y);awa
     const copyReleased=await copy.boundingBox();
     check(released.y<last.y-140,`${slug} ${width}x${height}: ordinary page scroll resumes after opening`);
     check(copyReleased.y<copyLast.y-140,`${slug} ${width}x${height}: copy resumes scrolling with the photograph`);
-    check(await page.evaluate(()=>{const pins=ScrollTrigger.getAll().filter(t=>t.pin);return pins.length===1&&pins[0].vars.id==='workshop-shutter'}),`${slug} ${width}x${height}: only the shutter section is pinned`);
+    // The hero (no spacing) and the horizontal departments story are the only other approved pins.
+    check(await page.evaluate(()=>{const pins=ScrollTrigger.getAll().filter(t=>t.pin);return pins.some(t=>t.vars.id==='workshop-shutter')&&pins.every(t=>['workshop-shutter','departments'].includes(t.vars.id)||t.vars.pinSpacing===false)}),`${slug} ${width}x${height}: shutter pinned alongside approved scenes only`);
    }
   }
   await page.setViewportSize({width:1280,height:900});
@@ -69,6 +70,8 @@ async function scroll(page,y){await page.evaluate(y=>window.scrollTo(0,y),y);awa
   await page.mouse.wheel(0,120);await page.waitForTimeout(550);
   const wheelAfter=await page.locator('.workshop-scene').boundingBox();
   check(await opening(page)>beforeOpening&&Math.abs(wheelBefore.y-wheelAfter.y)<2,'Actual mouse wheel opens the shutter while the photo stays fixed');
+  // The header steps aside while scrolling down; keyboard focus brings it back.
+  await page.locator('#menu-open').focus();await page.waitForTimeout(800);
   await page.locator('#menu-open').click();
   check(await page.locator('#menu').evaluate(el=>!el.inert),'Menu remains usable during the pinned scene');
   await page.keyboard.press('Escape');
